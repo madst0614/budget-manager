@@ -1,10 +1,10 @@
-package wanted.n.budgetmanager;
+package wanted.n.budgetmanager.server;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BudgetManagerApplicationTests {
+class ServerApplicationTests {
 
     @Test
     void contextLoads() {
