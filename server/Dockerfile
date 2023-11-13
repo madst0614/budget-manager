@@ -15,4 +15,4 @@ RUN ./gradlew clean build -x test
 ENV JAR_PATH=/app/build/libs
 RUN mv ${JAR_PATH}/*.jar /app/app.jar
 
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=local", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
