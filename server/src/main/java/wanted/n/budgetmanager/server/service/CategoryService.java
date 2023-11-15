@@ -4,10 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import wanted.n.budgetmanager.server.domain.Category;
+import wanted.n.budgetmanager.server.dto.CategoryListResponseDTO;
 import wanted.n.budgetmanager.server.repository.CategoryRepository;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -15,8 +13,9 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Cacheable(value="categoryList", key="'category'")
-    public List<Category> getCategoryList(){
-        return categoryRepository.findAll();
+    public CategoryListResponseDTO getCategoryList(){
+
+        return CategoryListResponseDTO.from(categoryRepository.findAll());
     }
 
 
