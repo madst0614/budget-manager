@@ -24,20 +24,20 @@ public class User extends BaseEntity{
     @Column
     private String email;
 
-    @NotNull
     @Column
+    @NotNull
     private String password;
 
-    @NotNull
     @Column
+    @NotNull
     private String account;
 
     @Column(name = "user_role")
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
-    @NotNull
     @Column
+    @NotNull
     private Boolean deleted;
 
     public static User from(UserSignUpRequestDTO userSignUpRequestDTO){
