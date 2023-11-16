@@ -71,7 +71,7 @@ public class UserService {
      *  토큰으로부터 id를 추출하여 refresh 토큰을 제거합니다
      */
     public void signOutUser(String token) {
-        Long id = authService.getIdFromToken
+        Long id = authService.getUserIdFromToken
                         (token);
 
         authService.deleteRefreshToken(id);

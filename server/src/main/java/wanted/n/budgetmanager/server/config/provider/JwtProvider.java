@@ -9,6 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import wanted.n.budgetmanager.server.dto.TokenIssuanceDTO;
+import wanted.n.budgetmanager.server.exception.CustomException;
+import wanted.n.budgetmanager.server.exception.ErrorCode;
 import wanted.n.budgetmanager.server.service.UserDetailsServiceImpl;
 
 import javax.annotation.PostConstruct;
@@ -83,8 +85,8 @@ public class JwtProvider{
             log.info("<Jwt Provider 토큰 만료 시간: " + claims.getBody().getExpiration().toString());
 
             return claims.getBody().getExpiration().before(new Date());
-        } catch (JwtException ex) {
-            throw new IllegalStateException("올바르지 않은 토큰입니다.");
+        } catch (CustomException ex) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
     }
 

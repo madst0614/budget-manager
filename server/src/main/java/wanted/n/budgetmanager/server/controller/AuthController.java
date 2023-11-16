@@ -18,7 +18,7 @@ import wanted.n.budgetmanager.server.service.AuthService;
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/v1/auths")
 @Api(tags = "Auth API", description = "인증과 관련된 API")
 @RestController
 public class AuthController {
