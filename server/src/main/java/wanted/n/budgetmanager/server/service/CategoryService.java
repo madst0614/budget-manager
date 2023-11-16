@@ -12,6 +12,10 @@ import wanted.n.budgetmanager.server.repository.CategoryRepository;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
 
+    /**  카테고리 가져오기
+
+        모든 카테고리 리스트 가져오기
+     */
     @Cacheable(value="categoryList", key="'category'")
     public CategoryListResponseDTO getCategoryList(){
 
