@@ -27,10 +27,13 @@ public enum ErrorCode {
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 유효하지 않습니다."),
 
     //Budget Exception
-    UNAUTHORIZED_BUDGET_ACCESS(HttpStatus.UNAUTHORIZED, "권한이 없습니다."),
+    UNAUTHORIZED_ACCESS(HttpStatus.UNAUTHORIZED, "권한이 없습니다."),
     INVALID_PERCENTAGE_SUM(HttpStatus.BAD_REQUEST, "퍼센티지 합이 잘못됐습니다."),
     BUDGET_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 예산 정보가 존재하지 않습니다."),
-    BUDGET_DELETED(HttpStatus.BAD_REQUEST, "삭제된 예산입니다.");
+    BUDGET_DELETED(HttpStatus.BAD_REQUEST, "삭제된 예산입니다."),
+
+    //Spending Exception
+    SPENDING_DELETED(HttpStatus.BAD_REQUEST, "삭제된 지출 입니다.");
 
     private final HttpStatus status;
     private final String message;
