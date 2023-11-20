@@ -34,12 +34,9 @@ public class SwaggerConfig implements WebMvcConfigurer { // http://localhost:808
     /* API 정보를 설정 하는 메서드 */
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title(" 지리기반 맛집 추천 웹 서비스 <Tasty Spots Finder> REST API") // API 명세서 제목
+                .title(" 예산 매니저 서비스 <Budget-Manager> REST API") // API 명세서 제목
                 .description("Spring Boot를 이용한 REST API 프로젝트") // API 명세서 설명
                 .version("0.0.1") // API 명세서 버전
-                .contact(new Contact("Team \"N\"",
-                        "https://github.com/7th-wanted-pre-onboarding-teamN/tasty-spots-finder",
-                        "kkzz0001@gmail.com")) // 팀 정보 및 팀장(이준규) 연락처
                 .build();
     }
 
