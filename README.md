@@ -35,6 +35,7 @@
 [![Swagger](https://img.shields.io/badge/swagger_문서로_확인하기_(클릭!)-85EA2D?&logo=swagger&logoColor=white)](http://52.79.93.98:8080/swagger-ui/index.html#/)
 
 
+
 | API Type         | Http Method | URL                        | Description     |
 |------------------|-------------|----------------------------|-----------------|
 | **Auth API**     | POST        | `/api/v1/auth/token/access` | 엑세스토큰 재발급       | 
@@ -53,7 +54,6 @@
 | **Spending API** | GET         | `/api/v1/spendings/{id} `  | 사용자 지출 기록 가져오기  |
 | **Spending API** | DELETE      | `/api/v1/spendings/{id} `  | 사용자 지출 기록 삭제    |
 | **Spending API** | PATCH        | `/api/v1/spendings/{id} `  | 사용자 지출 기록 업데이트  |
-
 
 ## 구현기능
 

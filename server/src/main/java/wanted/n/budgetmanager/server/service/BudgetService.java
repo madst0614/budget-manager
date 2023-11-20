@@ -144,7 +144,6 @@ public class BudgetService {
                throw new CustomException(ErrorCode.BUDGET_DELETED);
 
           if(!userId.getUserId().equals(accessUserId)){
-               log.info(userId.getUserId().toString());
                throw new CustomException(ErrorCode.UNAUTHORIZED_ACCESS);
           }
 
