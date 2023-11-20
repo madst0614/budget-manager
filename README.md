@@ -35,19 +35,24 @@
 [![Swagger](https://img.shields.io/badge/swagger_문서로_확인하기_(클릭!)-85EA2D?&logo=swagger&logoColor=white)](http://52.79.93.98:8080/swagger-ui/index.html#/)
 
 
-| API Type            | Http Method | URL                                  | Description     |
-|---------------------|-------------|--------------------------------------|-----------------|
-| **Auth API**        | POST        | `/api/v1/auth/token/access`          | 엑세스토큰 재발급       | 
-| **User API**        | POST        | `/api/v1/users/sign-up`              | 회원가입            |
-| **User API**        | POST        | `/api/v1/users/sign-in`              | 로그인             |
-| **User API**        | POST        | `/api/v1/users/sign-out`             | 로그아웃            |
-| **Category API**    | GET         | `/api/v1/categorys`                  | 카테고리 리스트        |
-| **Budget API**      | GET         | `/api/v1/budgets`                    | 사용자 예산 리스트      |
-| **Budget API**      | GET         | `/api/v1/budgets/{bgId}`             | 사용자 예산 상세정보     |
-| **Budget API**      | POST        | `/api/v1/budgets`                    | 사용자 예산 등록       |
-| **Budget API**      | DELETE      | `/api/v1/budgets/{bgId}`             | 사용자 예산 삭제       |
-| **Budget API**      | PATCH       | `/api/v1/budgets/{bgId}`             | 사용자 예산 업데이트     |
-| **Budget API**      | PUT         | `/api/v1/budgets/detail/{bgId}`      | 사용자 예산 디테일 업데이트 |
+| API Type         | Http Method | URL                        | Description     |
+|------------------|-------------|----------------------------|-----------------|
+| **Auth API**     | POST        | `/api/v1/auth/token/access` | 엑세스토큰 재발급       | 
+| **User API**     | POST        | `/api/v1/users/sign-up`    | 회원가입            |
+| **User API**     | POST        | `/api/v1/users/sign-in`    | 로그인             |
+| **User API**     | POST        | `/api/v1/users/sign-out`   | 로그아웃            |
+| **Category API** | GET         | `/api/v1/categorys`        | 카테고리 리스트        |
+| **Budget API**   | GET         | `/api/v1/budgets`          | 사용자 예산 리스트      |
+| **Budget API**   | GET         | `/api/v1/budgets/{bgId}`   | 사용자 예산 상세정보     |
+| **Budget API**   | POST        | `/api/v1/budgets`          | 사용자 예산 등록       |
+| **Budget API**   | DELETE      | `/api/v1/budgets/{bgId}`   | 사용자 예산 삭제       |
+| **Budget API**   | PATCH       | `/api/v1/budgets/{bgId}`   | 사용자 예산 업데이트     |
+| **Budget API**   | PUT         | `/api/v1/budgets/detail/{bgId}` | 사용자 예산 디테일 업데이트 |
+| **Spending API** | GET         | `/api/v1/spendings `       | 사용자 지출 목록 가져오기  |
+| **Spending API** | POST        | `/api/v1/spendings `       | 사용자 지출 기록 생성    |
+| **Spending API** | GET         | `/api/v1/spendings/{id} `  | 사용자 지출 기록 가져오기  |
+| **Spending API** | DELETE      | `/api/v1/spendings/{id} `  | 사용자 지출 기록 삭제    |
+| **Spending API** | PATCH        | `/api/v1/spendings/{id} `  | 사용자 지출 기록 업데이트  |
 
 
 ## 구현기능
@@ -109,115 +114,50 @@
 
 </details>
 <details>
-  <summary>리뷰 등록 기능</summary>
+  <summary>사용자 지출 목록 가져오기 </summary>
 
 - **구현 기능** <br>
-    - 리뷰를 등록합니다.
+    - 사용자 지출 목록을 가져옵니다.
 
 - **구현 방법**<br>
-    - 평점과 리뷰 내용을 등록합니다.
-    - 리뷰 등록시 맛집의 평점과 리뷰수를 업데이트 합니다.
-    - 리뷰 등록시 Redis에 캐싱되어있는 해당맛집의 데이터를 삭제하여 최신화되도록 했습니다.
-
-</details>
-
-
-<details>
-  <summary>식당 정보 가져오는 스케쥴링</summary>
-
-- **구현 기능** <br>
-    - 식당 정보 가져오는 스케쥴링 기능 구현
-
-- **구현 방법** <br>
-    - 총 5개 외부 api를 호출합니다.(경기도 일반음식점 _ 패스트푸드,중식,양식,뷔페,일식)
-    - 모든 값을 그대로 저장하되 null값은 데이터 타입에 따라 `데이터없음`, `0` , `0.0` 으로 전처리
-    - 유일키는 식당이름+지번주소 에 공백을 제거하여 사용
-    - 폐업상태 식당의 경우 저장하지 않음.
-    - 매일 `23:59` 스케줄링 동작
-    - 저장시점에 저장 식당 종류, 시간을 로깅
-    - 이미 저장된 식당의 경우 업데이트 진행
+    - 사용자의 id와 조회 조건을 받아 QueryDSL로 조건 목록 조회를 구현했습니다.
+  
 </details>
 <details>
-  <summary>점심추천에 동의한 고객들에게 메세지 전송하는 기능</summary>
+  <summary>사용자 지출 기록 생성</summary>
 
 - **구현 기능** <br>
-    - 점심추천에 동의한 고객들에게 메세지 전송하는 기능 추가
-
-- **구현 방법** <br>
-    - 점심약속에 동의한 고객들의 목록을 조회
-    - 고객의 좌표에 가까우며 별점이 가장높은 5개 카테고리의 식당 5개씩, 총 25개 조회(`QueryDSL`,하버사인 공식 사용)
-    - 5개씩 한 `embed`에 묶어 `DiscordWebhook` 으로 전송할 메세지 객체 생성
-    - 조회된 고객순서대로 메세지 전송 `DiscordWebhook` 호출
-        - 메시지 예시(각 카테고리별 5개씩)
-          > 오늘의 추천 일식
-          <br><strong>산(뼈찜,뼈곰탕)</strong>
-          <br>경기도 평택시 탄현로1번길 11, 101,102호 (장당동, 엘림하우스)
-          <br> <strong>스고이</strong>
-          <br> 경기도 평택시 고덕갈평7길 10, 1층 (고덕동)
-          <br> <strong>광명회수산</strong>
-          <br> 경기도 평택시 현촌4길 2-33, 101호 (용이동)
-          <br> <strong>오늘은참치</strong>
-          <br> 경기도 시흥시 옥구천동로 449, 부성파스텔아파트 상가동 1층 105호 (정왕동)
-          <br> <strong>장군수산</strong>
-          <br> 경기도 오산시 오산로160번길 5-6, 102,103,104호 (원동, 건정프라자)
-</details>
-<details>
-  <summary>시군구 데이터를 csv파일로 업데이트하는 기능</summary>
-
-- **구현 기능** <br>
-    - 시군구 데이터를 `.csv`파일로 업데이트하는 기능 추가
-    - 시군구 데이터양식 `.csv`파일을 다운로드하는 기능 추가
-
-- **구현 방법** <br>
-    - **파일업로드**<br>
-      a. 각 라인이 null이 아닐때까지 읽어 가며 각 셀을 "," 로 구분하여 배열로 변환<br>
-      b. 배열의 각 요소로 SggLatLon 객체를 생성해 저장<br>
-      c. 예외 발생시 로그 적재
-    - **파일다운로드** <br>
-      a. 도,시,위도,경로 로 이루어진 양식을 생성<br>
-      b. 해당파일을 InputStream으로 변환<br>
-      c. InputStream을 다시 InputStreamResource로 변환<br>
-      d. sgg-template.csv 파일 반환
-</details>
-
-<details>
-  <summary>시군구 목록 조회 기능</summary>
-
-- **구현 기능** <br>
-    - 시군구 목록 조회기능 추가 (캐싱 적용)
-
-- **구현 방법** <br>
-    - 성능 개선 및 동시성 처리 목적으로 캐싱 적용.
-    - 만료일은 1일, 키는 `String`으로 직렬화, 값은 `Json`으로 직렬화
-    - 필요한 메서드에서 어노테이션을 사용해 캐싱 진행
-    - 시군구 목록을 조회해오는 기능을 추가 (캐싱적용 `@Cacheable`,`@CacheEvict`)
-    - 해당 캐시는 1일 유효하며 만약 CSV파일이 업로드 될 시 캐시 초기화
-</details>
-
-
-<details>
-  <summary>CI 구축</summary>
-
-- **구현 기능** <br>
-    - Github Actions를 통해 main의 pr과 push, dev의 pr 생성시 빌드, 테스트 자동화
+    - 사용자의 지출 기록을 생성합니다.
 
 - **구현 방법**<br>
-![CI1](/readme_source/ci_cd/CI1.png)
+    - 사용자의 양식을 받아 지출 기록을 생성합니다.
 </details>
-
 <details>
-  <summary>CD 구축</summary>
+  <summary>사용자 지출 기록 가져오기</summary>
 
 - **구현 기능** <br>
-    - main branch의 push 동작이 발생하면, aws 인증 후 s3를 통해 배포
+    - 사용자가 선택한 지출 기록을 가져옵니다.
 
 - **구현 방법**<br>
-    - CodeDeploy를 통해 배포 자동화
-![cd1](/readme_source/ci_cd/CD1.png)
+    - 사용자가 선택한 지출 id와 토큰 userid를 이용해 권한 체크를 하고 가져옵니다.
+</details>
+<details>
+  <summary>사용자 지출 기록 삭제</summary>
 
-    - 위 설정을 통해 jar 파일 실행
-    ![cd2](/readme_source/ci_cd/CD2.png)
+- **구현 기능** <br>
+    - 사용자가 선택한 지출 기록을 삭제합니다.
 
+- **구현 방법**<br>
+    - 사용자가 선택한 지출 id와 토큰 userid를 이용해 권한 체크를 하고 삭제합니다.
+</details>
+<details>
+  <summary>사용자 지출 기록 업데이트</summary>
+
+- **구현 기능** <br>
+    - 사용자가 선택한 지출 기록을 요청 시 제출한 양식으로 업데이트합니다.
+
+- **구현 방법**<br>
+    - 사용자가 선택한 지출 id와 토큰 userid를 이용해 권한 체크를 하고 제출한 양식대로 업데이트 합니다.
 </details>
 
 ## 시스템 구성도
