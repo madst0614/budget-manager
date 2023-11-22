@@ -4,16 +4,18 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SpendingListResponseDTO {
-    private Integer sum;
-    private List<Long> categoryList;
-    private Map<Long, Integer> catSum;
-    private List<SpendingBriefVO> spendingBriefVOList;
+public class StatsSpdDayGetDTO {
+    private Long userId;
+
+    private LocalDate date;
+
+    private List<Long> catIdList;
 }

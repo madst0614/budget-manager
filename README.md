@@ -35,25 +35,25 @@
 [![Swagger](https://img.shields.io/badge/swagger_문서로_확인하기_(클릭!)-85EA2D?&logo=swagger&logoColor=white)](http://52.79.93.98:8080/swagger-ui/index.html#/)
 
 
-
-| API Type         | Http Method | URL                        | Description     |
-|------------------|-------------|----------------------------|-----------------|
-| **Auth API**     | POST        | `/api/v1/auth/token/access` | 엑세스토큰 재발급       | 
-| **User API**     | POST        | `/api/v1/users/sign-up`    | 회원가입            |
-| **User API**     | POST        | `/api/v1/users/sign-in`    | 로그인             |
-| **User API**     | POST        | `/api/v1/users/sign-out`   | 로그아웃            |
-| **Category API** | GET         | `/api/v1/categorys`        | 카테고리 리스트        |
-| **Budget API**   | GET         | `/api/v1/budgets`          | 사용자 예산 리스트      |
-| **Budget API**   | GET         | `/api/v1/budgets/{bgId}`   | 사용자 예산 상세정보     |
-| **Budget API**   | POST        | `/api/v1/budgets`          | 사용자 예산 등록       |
-| **Budget API**   | DELETE      | `/api/v1/budgets/{bgId}`   | 사용자 예산 삭제       |
-| **Budget API**   | PATCH       | `/api/v1/budgets/{bgId}`   | 사용자 예산 업데이트     |
-| **Budget API**   | PUT         | `/api/v1/budgets/detail/{bgId}` | 사용자 예산 디테일 업데이트 |
-| **Spending API** | GET         | `/api/v1/spendings `       | 사용자 지출 목록 가져오기  |
-| **Spending API** | POST        | `/api/v1/spendings `       | 사용자 지출 기록 생성    |
-| **Spending API** | GET         | `/api/v1/spendings/{id} `  | 사용자 지출 기록 가져오기  |
-| **Spending API** | DELETE      | `/api/v1/spendings/{id} `  | 사용자 지출 기록 삭제    |
-| **Spending API** | PATCH        | `/api/v1/spendings/{id} `  | 사용자 지출 기록 업데이트  |
+| API Type           | Http Method | URL                               | Description     |
+|--------------------|-------------|-----------------------------------|-----------------|
+| **Auth API**       | POST        | `/api/v1/auth/token/access`       | 엑세스토큰 재발급       | 
+| **User API**       | POST        | `/api/v1/users/sign-up`           | 회원가입            |
+| **User API**       | POST        | `/api/v1/users/sign-in`           | 로그인             |
+| **User API**       | POST        | `/api/v1/users/sign-out`          | 로그아웃            |
+| **Category API**   | GET         | `/api/v1/categorys`               | 카테고리 리스트        |
+| **Budget API**     | GET         | `/api/v1/budgets`                 | 사용자 예산 리스트      |
+| **Budget API**     | GET         | `/api/v1/budgets/{bgId}`          | 사용자 예산 상세정보     |
+| **Budget API**     | POST        | `/api/v1/budgets`                 | 사용자 예산 등록       |
+| **Budget API**     | DELETE      | `/api/v1/budgets/{bgId}`          | 사용자 예산 삭제       |
+| **Budget API**     | PATCH       | `/api/v1/budgets/{bgId}`          | 사용자 예산 업데이트     |
+| **Budget API**     | PUT         | `/api/v1/budgets/detail/{bgId}`   | 사용자 예산 디테일 업데이트 |
+| **Spending API**   | GET         | `/api/v1/spendings `              | 사용자 지출 목록 가져오기  |
+| **Spending API**   | POST        | `/api/v1/spendings `              | 사용자 지출 기록 생성    |
+| **Spending API**   | GET         | `/api/v1/spendings/{id} `         | 사용자 지출 기록 가져오기  |
+| **Spending API**   | DELETE      | `/api/v1/spendings/{id} `         | 사용자 지출 기록 삭제    |
+| **Statistics API** | GET         | `/api/v1/stats/{yyyy}/{MM}/{dd} ` | 사용자 하루 통계 가져오기  |
+| **Statistics API** | PUT         | `/api/v1/stats/{yyyy}/{MM}/{dd} ` | 사용자 하루 통계 업데이트  |
 
 ## 구현기능
 
@@ -94,7 +94,7 @@
 </details>
 
 <details>
-  <summary>사용자 예산 리스트 조회 기능</summary>
+  <summary>사용자 예산 가져오기</summary>
 
 - **구현 기능** <br>
     - 사용자가 설정한 예산 리스트를 반환
@@ -103,7 +103,7 @@
     - 사용자 아이디로 조회한 예산 리스트를 반환합니다.
 </details>
 <details>
-  <summary>사용자 예산 상세 정보 조회 기능</summary>
+  <summary>사용자 예산 디테일 가져오기 기능</summary>
 
 - **구현 기능** <br>
     - 사용자 예산의 상세정보를 조회합니다.
@@ -113,23 +113,40 @@
 
 </details>
 <details>
+  <summary>사용자 예산 등록/삭제/업데이트 기능</summary>
+
+- **구현 기능** <br>
+  - 사용자의 예산을 요청한 기능에 따라 수행합니다.
+
+- **구현 방법**<br>
+  - 사용자에게 받은 양식을 이용해 지출 기록을 CRUD 합니다.
+</details>
+<details>
+  <summary>사용자 예산 디테일 업데이트 기능</summary>
+
+- **구현 기능** <br>
+  - 사용자 예산의 상세정보를 업데이트합니다.
+
+- **구현 방법**<br>
+  - 사용자에게 받은 양식을 이용해 사용자 예산 디테일을 업데이트 합니다.
+</details>
+<details>
   <summary>사용자 지출 목록 가져오기 </summary>
 
 - **구현 기능** <br>
     - 사용자 지출 목록을 가져옵니다.
 
 - **구현 방법**<br>
-    - 사용자의 id와 조회 조건을 받아 QueryDSL로 조건 목록 조회를 구현했습니다.
-  
+    - 사용자의 id와 조회 조건을 받아 QueryDSL로 조건 목록 조회를 진행합니다.
 </details>
 <details>
-  <summary>사용자 지출 기록 생성</summary>
+  <summary>사용자 지출 기록 생성/삭제/업데이트 기능</summary>
 
 - **구현 기능** <br>
-    - 사용자의 지출 기록을 생성합니다.
+    - 사용자의 지출 기록을 요청한 기능에 따라 수행합니다.
 
 - **구현 방법**<br>
-    - 사용자의 양식을 받아 지출 기록을 생성합니다.
+    - 사용자의 받은 양식을 이용해 지출 기록을 CRUD 합니다.
 </details>
 <details>
   <summary>사용자 지출 기록 가져오기</summary>
@@ -138,25 +155,27 @@
     - 사용자가 선택한 지출 기록을 가져옵니다.
 
 - **구현 방법**<br>
-    - 사용자가 선택한 지출 id와 토큰 userid를 이용해 권한 체크를 하고 가져옵니다.
+    - 사용자가 선택한 지출 id와 토큰 userid를 이용해 지출 기록을 조회합니다.
 </details>
+
 <details>
-  <summary>사용자 지출 기록 삭제</summary>
+  <summary>사용자 하루 통계 가져오기</summary>
 
 - **구현 기능** <br>
-    - 사용자가 선택한 지출 기록을 삭제합니다.
+  - 사용자가 선택한 하루 통계 기록을 가져옵니다.
 
 - **구현 방법**<br>
-    - 사용자가 선택한 지출 id와 토큰 userid를 이용해 권한 체크를 하고 삭제합니다.
+  - 사용자가 선택한 날짜와 카테고리 리스트를 이용해 QueryDSL로 하루 통계를 조회합니다.
 </details>
 <details>
-  <summary>사용자 지출 기록 업데이트</summary>
+  <summary>사용자 하루 통계 업데이트</summary>
 
 - **구현 기능** <br>
-    - 사용자가 선택한 지출 기록을 요청 시 제출한 양식으로 업데이트합니다.
+  - 사용자가 선택한 하루 통계 기록을 업데이트 합니다.
 
 - **구현 방법**<br>
-    - 사용자가 선택한 지출 id와 토큰 userid를 이용해 권한 체크를 하고 제출한 양식대로 업데이트 합니다.
+  - 사용자가 선택한 날짜와 제출한 양식을 이용해 하루 통계를 업데이트 합니다
+  - 기록이 없을 시, 새로 해당 날짜 기록을 만들고 업데이트 합니다.
 </details>
 
 ## 시스템 구성도

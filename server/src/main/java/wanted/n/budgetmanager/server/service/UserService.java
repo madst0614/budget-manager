@@ -47,6 +47,7 @@ public class UserService {
      * 사용자 로그인 처리를 하는 메서드
      *  비밀번호를 비교하고 액세스 토큰 및 리프레시 토큰을 생성하여 사용자 정보를 반환합니다.
      */
+    @Transactional
     public UserSignInResponseDTO signInUser(UserSignInRequestDTO signInRequest) {
         User user = userRepository.findByEmail(signInRequest.getEmail())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -70,6 +71,7 @@ public class UserService {
      * 사용자 로그아웃 처리를 하는 메서드
      *  토큰으로부터 id를 추출하여 refresh 토큰을 제거합니다
      */
+    @Transactional
     public void signOutUser(String token) {
         Long id = authService.getUserIdFromToken
                         (token);
