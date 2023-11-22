@@ -5,9 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import wanted.n.budgetmanager.server.domain.Spending;
-
-import javax.persistence.Column;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Getter
