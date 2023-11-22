@@ -11,7 +11,6 @@ import wanted.n.budgetmanager.server.dto.StatsSpdDayDTO;
 
 import java.util.List;
 
-import static wanted.n.budgetmanager.server.domain.QSpending.spending;
 import static wanted.n.budgetmanager.server.domain.QStatsSpdDay.statsSpdDay;
 
 @Repository
