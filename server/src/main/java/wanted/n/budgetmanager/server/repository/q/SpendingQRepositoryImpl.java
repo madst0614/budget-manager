@@ -5,10 +5,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
-import wanted.n.budgetmanager.server.domain.Category;
 import wanted.n.budgetmanager.server.dto.SpendingBriefVO;
 import wanted.n.budgetmanager.server.dto.SpendingListDTO;
 

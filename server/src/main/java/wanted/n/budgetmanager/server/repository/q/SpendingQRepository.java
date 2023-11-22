@@ -1,6 +1,5 @@
 package wanted.n.budgetmanager.server.repository.q;
 
-import org.springframework.data.domain.Page;
 import wanted.n.budgetmanager.server.dto.SpendingBriefVO;
 import wanted.n.budgetmanager.server.dto.SpendingListDTO;
 
