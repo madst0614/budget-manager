@@ -3,6 +3,7 @@ package wanted.n.budgetmanager.server.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import wanted.n.budgetmanager.server.domain.Budget;
 import wanted.n.budgetmanager.server.domain.BudgetDetail;
 import wanted.n.budgetmanager.server.dto.*;
@@ -26,6 +27,7 @@ public class BudgetService {
       *
       *   유저 ID로 저장된 예산 리스트를 가져옵니다
       */
+     @Transactional
      public BudgetListResponseDTO getBudgetList(BudgetListDTO budgetListDTO){
 
           return BudgetListResponseDTO.builder()
@@ -37,6 +39,7 @@ public class BudgetService {
       *
       *   선택한 예산 정보를 가져옵니다.
       */
+     @Transactional
      public BudgetDetailResponseDTO getBudgetDetail(BudgetDetailDTO budgetDetailDTO){
 
           isUserAccessValid(budgetDetailDTO.getUserId(), budgetDetailDTO.getBgId());
@@ -51,6 +54,7 @@ public class BudgetService {
           유효 기간인지 or not throw Exception
           사용자가 설정한 예산을 등록합니다.
       */
+     @Transactional
      public void registerBudget(BudgetRegisterDTO budgetRegisterDTO){
 
           if(budgetRegisterDTO.getStart().isAfter(budgetRegisterDTO.getEnd()))
@@ -69,7 +73,7 @@ public class BudgetService {
       *   사용자 예산을 삭제합니다
       *   실제 삭제되지 않고 deleted = true 작업합니다.
       */
-
+     @Transactional
      public void deleteBudget(BudgetDeleteDTO budgetDeleteDTO){
           Budget budget = budgetRepository.findById(budgetDeleteDTO.getId())
                   .orElseThrow(()->new CustomException(ErrorCode.BUDGET_NOT_FOUND));
@@ -92,6 +96,7 @@ public class BudgetService {
          사용자 예산 설정을 바꿀 수 있습니다.
           예산이 DB에 있는지, user id가 일치하는지, 유효 기간인지 확인 or not throw exception
       */
+     @Transactional
      public void updateBudget(BudgetUpdateDTO budgetUpdateDTO){
           // budget 없으면 throw BUDGET NOT FOUND
           Budget budget = budgetRepository.findById(budgetUpdateDTO.getId())
@@ -117,6 +122,7 @@ public class BudgetService {
           예산존재, 삭제X, 소유자
           or not throw exception
       */
+     @Transactional
      public void updateBudgetDetail(BudgetDetailUpdateDTO budgetDetailUpdateDTO){
 
           isUserAccessValid(budgetDetailUpdateDTO.getUserId(), budgetDetailUpdateDTO.getBgId());
@@ -144,7 +150,6 @@ public class BudgetService {
                throw new CustomException(ErrorCode.BUDGET_DELETED);
 
           if(!userId.getUserId().equals(accessUserId)){
-               log.info(userId.getUserId().toString());
                throw new CustomException(ErrorCode.UNAUTHORIZED_ACCESS);
           }
 

@@ -1,6 +1,9 @@
 package wanted.n.budgetmanager.server.domain;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import wanted.n.budgetmanager.server.dto.SpendingCreateDTO;
 import wanted.n.budgetmanager.server.dto.SpendingUpdateDTO;
 

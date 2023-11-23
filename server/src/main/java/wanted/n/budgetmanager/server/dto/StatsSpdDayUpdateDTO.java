@@ -4,22 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SpendingListDTO {
+public class StatsSpdDayUpdateDTO {
     private Long userId;
 
-    private List<Long> categoryList;
+    private Long catId;
 
-    private LocalDate start;
-    private LocalDate end;
+    private LocalDate date;
 
-    private Integer min;
-    private Integer max;
-
+    private Integer amount;
 }
