@@ -55,7 +55,6 @@
 | **Statistics API** | GET         | `/api/v1/stats/{yyyy}/{MM}/{dd} ` | 사용자 하루 통계 가져오기  |
 | **Statistics API** | PUT         | `/api/v1/stats/{yyyy}/{MM}/{dd} ` | 사용자 하루 통계 업데이트  |
 
-
 ## 구현기능
 
 <details>
@@ -111,6 +110,10 @@
 
 - **구현 방법**<br>
     - 사용자ID와 bgid로 사용자 예산 정보를 가져옵니다.
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3212595f95592ef9e6e0a595be9cffe85bae4a29
 </details>
 <details>
   <summary>사용자 예산 등록/삭제/업데이트 기능</summary>
@@ -120,7 +123,10 @@
 
 - **구현 방법**<br>
   - 사용자에게 받은 양식을 이용해 지출 기록을 CRUD 합니다.
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3212595f95592ef9e6e0a595be9cffe85bae4a29
 </details>
 <details>
   <summary>사용자 예산 디테일 업데이트 기능</summary>
@@ -131,7 +137,10 @@
 - **구현 방법**<br>
   - 사용자에게 받은 양식을 이용해 사용자 예산 디테일을 업데이트 합니다.
 </details>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3212595f95592ef9e6e0a595be9cffe85bae4a29
 <details>
   <summary>사용자 지출 목록 가져오기 </summary>
 
@@ -140,7 +149,10 @@
 
 - **구현 방법**<br>
     - 사용자의 id와 조회 조건을 받아 QueryDSL로 조건 목록 조회를 진행합니다.
+<<<<<<< HEAD
   
+=======
+>>>>>>> 3212595f95592ef9e6e0a595be9cffe85bae4a29
 </details>
 <details>
   <summary>사용자 지출 기록 생성/삭제/업데이트 기능</summary>

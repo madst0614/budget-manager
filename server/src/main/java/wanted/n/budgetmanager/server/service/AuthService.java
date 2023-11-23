@@ -77,6 +77,7 @@ public class AuthService {
      *      Refresh Token이 레디스에 있는 값과 일치하는지 확인합니다.
      */
     public Boolean isRefreshTokenInServer(String refreshToken) {
+
         String serverToken = redisService.getRefreshToken(getUserIdFromToken(refreshToken));
 
         // 레디스에 있는 값과 일치하면 true 반환
