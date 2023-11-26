@@ -37,8 +37,8 @@ public class StatsService {
 
     @Transactional
     public void updateStatsSpdDay(StatsSpdDayUpdateDTO statsSpdDayUpdateDTO) {
-        StatsSpdDay statsSpdDay = statsSpdDayRepository.findStatsSpdDayByUserIdAndCatIdAndDate(
-                statsSpdDayUpdateDTO.getUserId(), statsSpdDayUpdateDTO.getCatId(), statsSpdDayUpdateDTO.getDate());
+        StatsSpdDay statsSpdDay = statsSpdDayRepository.findStatsSpdDayByUserIdAndDateAndCatId(
+                statsSpdDayUpdateDTO.getUserId(), statsSpdDayUpdateDTO.getDate(), statsSpdDayUpdateDTO.getCatId());
 
         if(statsSpdDay==null){
             statsSpdDay = StatsSpdDay
