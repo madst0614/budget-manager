@@ -11,7 +11,7 @@ import wanted.n.budgetmanager.server.dto.StatsSpdDayDTO;
 
 import java.util.List;
 
-import static wanted.n.budgetmanager.server.domain.QStatsSpdMonth.statsSpdMonth;
+import static wanted.n.budgetmanager.server.domain.QStatsSpdDay.statsSpdDay;
 
 @Repository
 @RequiredArgsConstructor
@@ -22,27 +22,27 @@ public class StatsSpdDayQRepositoryImpl implements StatsSpdDayQRepository{
 
         // 유저 id 조건
         JPQLQuery<StatsSpdDay> query = queryFactory.select(Projections.fields(StatsSpdDay.class
-                , statsSpdMonth.id, statsSpdMonth.userId, statsSpdMonth.date, statsSpdMonth.sum.sum().as("sum")))
-                .from(statsSpdMonth)
-                .where(statsSpdMonth.userId.eq(statsSpdDayDTO.getUserId()));
+                , statsSpdDay.id, statsSpdDay.userId, statsSpdDay.date, statsSpdDay.sum.sum().as("sum")))
+                .from(statsSpdDay)
+                .where(statsSpdDay.userId.eq(statsSpdDayDTO.getUserId()));
 
         // 날짜 조건
-        query.where(statsSpdMonth.date.eq(statsSpdDayDTO.getDate()));
+        query.where(statsSpdDay.date.eq(statsSpdDayDTO.getDate()));
 
         // 카테고리 조건
         query.where(catIdEq(statsSpdDayDTO.getCategoryList()));
 
-        query.groupBy(statsSpdMonth.userId);
+        query.groupBy(statsSpdDay.userId);
 
         return query.fetchOne();
     }
 
     private BooleanExpression catIdEq(List<Long> categoryList){
         if(!categoryList.isEmpty()){
-            BooleanExpression init = statsSpdMonth.catId.eq(categoryList.get(0));
+            BooleanExpression init = statsSpdDay.catId.eq(categoryList.get(0));
 
             for(int i=1; i<categoryList.size(); i++){
-                init = statsSpdMonth.catId.eq(categoryList.get(i)).or(init);
+                init = statsSpdDay.catId.eq(categoryList.get(i)).or(init);
             }
 
             return init;

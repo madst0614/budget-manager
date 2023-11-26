@@ -16,6 +16,7 @@ import java.time.LocalDate;
 @Builder
 @Entity
 public class StatsSpdDay extends BaseEntity{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -50,4 +51,5 @@ public class StatsSpdDay extends BaseEntity{
     public void updateSum(int amount){
         this.sum += amount;
     }
+
 }
