@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 @Entity
-public class StatsSpdDay {
+public class StatsSpdDay extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,4 +35,19 @@ public class StatsSpdDay {
     @Column
     @NotNull
     private Long sum;
+
+    public static StatsSpdDay getDefault(OutboxSpdStats outboxSpdStats){
+        return StatsSpdDay.builder()
+                .userId(outboxSpdStats.getUserId())
+                .date(LocalDate.of(outboxSpdStats.getDate().getYear()
+                        , outboxSpdStats.getDate().getMonth()
+                        , outboxSpdStats.getDate().getDayOfMonth()))
+                .catId(outboxSpdStats.getCatId())
+                .sum(0L)
+                .build();
+    }
+
+    public void updateSum(int amount){
+        this.sum += amount;
+    }
 }

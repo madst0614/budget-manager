@@ -9,5 +9,5 @@ import java.time.LocalDate;
 
 @Repository
 public interface StatsSpdDayRepository extends JpaRepository<StatsSpdDay, Long>, StatsSpdDayQRepository {
-    StatsSpdDay findStatsSpdDayByUserIdAndCatIdAndDate(Long userId, Long catId, LocalDate date);
+    StatsSpdDay findStatsSpdDayByUserIdAndDateAndCatId(Long userId, LocalDate date , Long catId);
 }
