@@ -35,7 +35,7 @@ public class StatsSpdDay extends BaseEntity{
     @Column
     @NotNull
     private Long sum;
-
+  
     public static StatsSpdDay getDefault(OutboxSpdStats outboxSpdStats){
         return StatsSpdDay.builder()
                 .userId(outboxSpdStats.getUserId())

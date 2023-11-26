@@ -13,7 +13,6 @@ import java.util.List;
 
 import static wanted.n.budgetmanager.server.domain.QStatsSpdMonth.statsSpdMonth;
 
-
 @Repository
 @RequiredArgsConstructor
 public class StatsSpdDayQRepositoryImpl implements StatsSpdDayQRepository{
