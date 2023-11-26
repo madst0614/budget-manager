@@ -6,8 +6,8 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import wanted.n.budgetmanager.server.domain.StatsSpdDay;
-import wanted.n.budgetmanager.server.dto.StatsSpdDayDTO;
+import wanted.n.budgetmanager.server.domain.StatsSpdMonth;
+import wanted.n.budgetmanager.server.dto.StatsSpdMonthDTO;
 
 import java.util.List;
 
@@ -15,22 +15,22 @@ import static wanted.n.budgetmanager.server.domain.QStatsSpdMonth.statsSpdMonth;
 
 @Repository
 @RequiredArgsConstructor
-public class StatsSpdDayQRepositoryImpl implements StatsSpdDayQRepository{
+public class StatsSpdMonthQRepositoryImpl implements StatsSpdMonthQRepository {
     private final JPAQueryFactory queryFactory;
-    @Override
-    public StatsSpdDay getSumByCatIdList(StatsSpdDayDTO statsSpdDayDTO) {
 
+    @Override
+    public StatsSpdMonth getSumByCatIdList(StatsSpdMonthDTO statsSpdMonthDTO) {
         // 유저 id 조건
-        JPQLQuery<StatsSpdDay> query = queryFactory.select(Projections.fields(StatsSpdDay.class
-                , statsSpdMonth.id, statsSpdMonth.userId, statsSpdMonth.date, statsSpdMonth.sum.sum().as("sum")))
+        JPQLQuery<StatsSpdMonth> query = queryFactory.select(Projections.fields(StatsSpdMonth.class
+                        , statsSpdMonth.id, statsSpdMonth.userId, statsSpdMonth.date, statsSpdMonth.sum.sum().as("sum")))
                 .from(statsSpdMonth)
-                .where(statsSpdMonth.userId.eq(statsSpdDayDTO.getUserId()));
+                .where(statsSpdMonth.userId.eq(statsSpdMonthDTO.getUserId()));
 
         // 날짜 조건
-        query.where(statsSpdMonth.date.eq(statsSpdDayDTO.getDate()));
+        query.where(statsSpdMonth.date.eq(statsSpdMonthDTO.getDate()));
 
         // 카테고리 조건
-        query.where(catIdEq(statsSpdDayDTO.getCategoryList()));
+        query.where(catIdEq(statsSpdMonthDTO.getCategoryList()));
 
         query.groupBy(statsSpdMonth.userId);
 
