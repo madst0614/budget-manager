@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import wanted.n.budgetmanager.server.domain.Spending;
-
 import java.time.LocalDate;
 
 @Getter
