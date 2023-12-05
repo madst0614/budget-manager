@@ -6,6 +6,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import wanted.n.budgetmanager.server.dto.CategoryListResponseDTO;
+import wanted.n.budgetmanager.server.dto.CategoryRequestDTO;
+import wanted.n.budgetmanager.server.dto.CategoryResponseDTO;
+import wanted.n.budgetmanager.server.exception.CustomException;
+import wanted.n.budgetmanager.server.exception.ErrorCode;
 import wanted.n.budgetmanager.server.repository.CategoryRepository;
 
 @Service
@@ -22,6 +26,13 @@ public class CategoryService {
     public CategoryListResponseDTO getCategoryList(){
 
         return CategoryListResponseDTO.from(categoryRepository.findAll());
+    }
+
+    @Cacheable(value="category", key="'categoryId'")
+    @Transactional
+    public CategoryResponseDTO getCategory(CategoryRequestDTO categoryRequestDTO){
+        return CategoryResponseDTO.from(categoryRepository.findById(categoryRequestDTO.getId())
+                .orElseThrow(()->new CustomException(ErrorCode.CATEGORY_NOT_FOUND)));
     }
 
 
