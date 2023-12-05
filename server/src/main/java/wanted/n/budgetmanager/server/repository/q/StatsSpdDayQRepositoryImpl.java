@@ -2,15 +2,19 @@ package wanted.n.budgetmanager.server.repository.q;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import wanted.n.budgetmanager.server.domain.SpdCatAmountVO;
 import wanted.n.budgetmanager.server.domain.StatsSpdDay;
 import wanted.n.budgetmanager.server.dto.StatsSpdDayDTO;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import static wanted.n.budgetmanager.server.domain.QCategory.category;
 import static wanted.n.budgetmanager.server.domain.QStatsSpdDay.statsSpdDay;
 
 @Repository
@@ -35,6 +39,24 @@ public class StatsSpdDayQRepositoryImpl implements StatsSpdDayQRepository{
         query.groupBy(statsSpdDay.userId);
 
         return query.fetchOne();
+    }
+
+    @Override
+    public List<SpdCatAmountVO> findSumListByDateAndUserIdOrderByCatId(LocalDate date, Long userId) {
+
+        JPQLQuery<SpdCatAmountVO> query = queryFactory.select(Projections.fields(SpdCatAmountVO.class,
+                        category.id.as("catId"), new CaseBuilder()
+                                .when(statsSpdDay.sum.isNull())
+                                .then(0L)
+                                .otherwise(statsSpdDay.sum).as("amount")
+                ))
+                .from(category)
+                .leftJoin(statsSpdDay).on(statsSpdDay.catId.eq(category.id)
+                        .and(statsSpdDay.date.eq(date).or(statsSpdDay.date.isNull())
+                                .and(statsSpdDay.userId.eq(userId).or(statsSpdDay.userId.isNull()))))
+                .orderBy(category.id.asc());
+
+        return query.fetch();
     }
 
     private BooleanExpression catIdEq(List<Long> categoryList){

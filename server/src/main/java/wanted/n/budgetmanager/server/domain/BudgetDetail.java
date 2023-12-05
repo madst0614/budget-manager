@@ -25,5 +25,5 @@ public class BudgetDetail {
 
     @Column
     @NotNull(message = "값을 입력하세요.")
-    private Integer amount;
+    private Long amount;
 }

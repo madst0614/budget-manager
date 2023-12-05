@@ -14,6 +14,7 @@ public enum ErrorCode {
     INVALID_PAGINATION_OFFSET(HttpStatus.BAD_REQUEST, "page offset에 음수가 들어갈 수 없습니다."),
     INVALID_PAGINATION_SIZE(HttpStatus.BAD_REQUEST, "page size에 음수가 들어갈 수 없습니다."),
     INVALID_DATE(HttpStatus.BAD_REQUEST, "유효하지 않은 기간입니다."),
+    DATA_CONSISTENCY_ERROR(HttpStatus.SERVICE_UNAVAILABLE, "데이터에 문제가 있습니다"),
 
     //User Exception
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 유저가 존재하지 않습니다."),
@@ -33,7 +34,10 @@ public enum ErrorCode {
     BUDGET_DELETED(HttpStatus.BAD_REQUEST, "삭제된 예산입니다."),
 
     //Spending Exception
-    SPENDING_DELETED(HttpStatus.BAD_REQUEST, "삭제된 지출 입니다.");
+    SPENDING_DELETED(HttpStatus.BAD_REQUEST, "삭제된 지출 입니다."),
+
+    //Category Exception
+    CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 카테고리가 존재하지 않습니다.");
 
     private final HttpStatus status;
     private final String message;
