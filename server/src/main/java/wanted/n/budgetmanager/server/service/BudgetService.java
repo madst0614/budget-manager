@@ -22,6 +22,7 @@ import java.util.List;
 public class BudgetService {
      private final BudgetRepository budgetRepository;
      private final BudgetDetailRepository budgetDetailRepository;
+     private final CategoryService categoryService;
 
      /** 예산 조회 메소드
       *
@@ -132,6 +133,8 @@ public class BudgetService {
 
           budgetDetailUpdateDTO.getBudgetDetailList()
                   .forEach(budgetDetail -> {
+                       isCategoryValid(budgetDetail.getCatId());
+
                        budgetDetailList
                           .add(BudgetDetail.builder()
                                   .bgId(budgetDetailUpdateDTO.getBgId())
@@ -161,5 +164,9 @@ public class BudgetService {
 
           if(!budget.getUserId().equals(accessUserId))
                throw new CustomException(ErrorCode.UNAUTHORIZED_ACCESS);
+     }
+
+     public void isCategoryValid(Long id){
+          categoryService.getCategory(CategoryRequestDTO.builder().id(id).build());
      }
 }
