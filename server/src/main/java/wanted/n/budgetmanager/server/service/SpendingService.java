@@ -8,6 +8,7 @@ import wanted.n.budgetmanager.server.domain.Spending;
 import wanted.n.budgetmanager.server.dto.*;
 import wanted.n.budgetmanager.server.exception.CustomException;
 import wanted.n.budgetmanager.server.exception.ErrorCode;
+import wanted.n.budgetmanager.server.repository.OutboxSpdStatsRepository;
 import wanted.n.budgetmanager.server.repository.SpendingRepository;
 
 import java.util.HashMap;
@@ -19,6 +20,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class SpendingService {
     private final SpendingRepository spendingRepository;
+    private final OutboxSpdStatsRepository outboxSpdStatsRepository;
+    private final CategoryService categoryService;
 
     @Transactional
     public SpendingListResponseDTO getSpendingList(SpendingListDTO spendingListDTO){
@@ -58,6 +61,8 @@ public class SpendingService {
 
     @Transactional
     public void createSpending(SpendingCreateDTO spendingCreateDTO){
+        isCategoryValid(spendingCreateDTO.getCatId());
+
         spendingRepository.save(Spending.from(spendingCreateDTO));
     }
 
@@ -66,6 +71,7 @@ public class SpendingService {
         Spending spending = spendingRepository.getReferenceById(spendingUpdateDTO.getId());
 
         validAccessCheck(spending, spendingUpdateDTO.getUserId());
+        isCategoryValid(spendingUpdateDTO.getCatId());
 
         spendingRepository.save(Spending.from(spendingUpdateDTO));
     }
@@ -95,5 +101,10 @@ public class SpendingService {
 
         if(spending.getDeleted())
             throw new CustomException(ErrorCode.SPENDING_DELETED);
+    }
+
+    public void isCategoryValid(Long id){
+        categoryService.getCategory(CategoryRequestDTO.builder().id(id).build());
+
     }
 }

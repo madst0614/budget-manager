@@ -13,6 +13,8 @@ import wanted.n.budgetmanager.server.exception.CustomException;
 import wanted.n.budgetmanager.server.exception.ErrorCode;
 import wanted.n.budgetmanager.server.repository.UserRepository;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -77,6 +79,12 @@ public class UserService {
                         (token);
 
         authService.deleteRefreshToken(id);
+    }
+
+    @Transactional
+    public List<User> findAllUsers() {
+
+        return  userRepository.findAll();
     }
 
 

@@ -10,13 +10,12 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Getter
-@Table(name="stats_spd_day")
+@Table(name="stats_spd_month")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
-public class StatsSpdDay extends BaseEntity{
-
+public class StatsSpdMonth extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,13 +35,13 @@ public class StatsSpdDay extends BaseEntity{
     @Column
     @NotNull
     private Long sum;
-  
-    public static StatsSpdDay getDefault(OutboxSpdStats outboxSpdStats){
-        return StatsSpdDay.builder()
+
+    public static StatsSpdMonth getDefault(OutboxSpdStats outboxSpdStats){
+        return StatsSpdMonth.builder()
                 .userId(outboxSpdStats.getUserId())
                 .date(LocalDate.of(outboxSpdStats.getDate().getYear()
                         , outboxSpdStats.getDate().getMonth()
-                        , outboxSpdStats.getDate().getDayOfMonth()))
+                        , 1))
                 .catId(outboxSpdStats.getCatId())
                 .sum(0L)
                 .build();
@@ -51,5 +50,4 @@ public class StatsSpdDay extends BaseEntity{
     public void updateSum(int amount){
         this.sum += amount;
     }
-
 }

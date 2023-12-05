@@ -5,22 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SpendingBriefVO {
+public class CategoryRequestDTO {
     private Long id;
-
-    private Long userId;
-
-    private Long catId;
-
-    private LocalDate date;
-
-    private Integer amount;
-
-    private Boolean excluded;
 }

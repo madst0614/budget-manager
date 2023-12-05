@@ -6,21 +6,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SpendingBriefVO {
-    private Long id;
-
+public class StatsSpdMonthGetDTO {
     private Long userId;
-
-    private Long catId;
 
     private LocalDate date;
 
-    private Integer amount;
-
-    private Boolean excluded;
+    private List<Long> catIdList;
 }

@@ -6,8 +6,11 @@ import wanted.n.budgetmanager.server.domain.StatsSpdDay;
 import wanted.n.budgetmanager.server.repository.q.StatsSpdDayQRepository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 public interface StatsSpdDayRepository extends JpaRepository<StatsSpdDay, Long>, StatsSpdDayQRepository {
-    StatsSpdDay findStatsSpdDayByUserIdAndCatIdAndDate(Long userId, Long catId, LocalDate date);
+    StatsSpdDay findStatsSpdDayByUserIdAndDateAndCatId(Long userId, LocalDate date , Long catId);
+
+    List<StatsSpdDay> findAllByUserIdAndDateOrderByCatIdAsc(Long userId, LocalDate date);
 }
