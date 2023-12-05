@@ -11,16 +11,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SpendingBriefVO {
-    private Long id;
-
+public class TodaySpdRecomRequestDTO {
     private Long userId;
 
-    private Long catId;
-
-    private LocalDate date;
-
-    private Integer amount;
-
-    private Boolean excluded;
+    private LocalDate now;
 }

@@ -4,23 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import wanted.n.budgetmanager.server.domain.SpdCatAmountVO;
 
-import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SpendingBriefVO {
-    private Long id;
+public class TodaySpdInfoVO {
 
-    private Long userId;
+    private Long todayTotal;
 
-    private Long catId;
-
-    private LocalDate date;
-
-    private Integer amount;
-
-    private Boolean excluded;
+    private List<SpdCatAmountVO> todaySpdCatAmountVOList;
 }
