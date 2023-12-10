@@ -6,7 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import wanted.n.budgetmanager.server.domain.SpdCatAmountVO;
 import wanted.n.budgetmanager.server.dto.*;
+import wanted.n.budgetmanager.server.exception.CustomException;
+import wanted.n.budgetmanager.server.exception.ErrorCode;
 import wanted.n.budgetmanager.server.repository.BudgetDetailRepository;
+import wanted.n.budgetmanager.server.repository.BudgetRepository;
 import wanted.n.budgetmanager.server.repository.StatsSpdDayRepository;
 import wanted.n.budgetmanager.server.repository.StatsSpdMonthRepository;
 
@@ -20,6 +23,7 @@ import java.util.List;
 public class ConsultingService {
     private final StatsSpdDayRepository statsSpdDayRepository;
     private final StatsSpdMonthRepository statsSpdMonthRepository;
+    private final BudgetRepository budgetRepository;
     private final BudgetDetailRepository budgetDetailRepository;
 
     @Transactional
@@ -30,9 +34,12 @@ public class ConsultingService {
         // MonthRepo 양식으로 변경 'yyyy-MM-1';
         LocalDate month = dayPatternToMonthPattern(now);
 
+        budgetRepository.findByUserIdAndDate(userId, month)
+                .orElseThrow(()->new CustomException(ErrorCode.BUDGET_NOT_FOUND));
+
         List<SpdCatAmountVO> spdCatDayList = statsSpdDayRepository.findSumListByDateAndUserIdOrderByCatId(now, userId);
 
-        List<SpdCatAmountVO> spdCatMonthList = statsSpdMonthRepository.findSumListByDateAndUserIdOrderByCatid(month, userId);
+        List<SpdCatAmountVO> spdCatMonthList = statsSpdMonthRepository.findSumListByDateAndUserIdOrderByCatId(month, userId);
 
         List<SpdCatAmountVO> currentSpdCatAmountVOList = calcCurrentCatAmount(spdCatDayList, spdCatMonthList);
 
@@ -52,7 +59,7 @@ public class ConsultingService {
 
         List<SpdCatAmountVO> spdCatDayList = statsSpdDayRepository.findSumListByDateAndUserIdOrderByCatId(now, userId);
 
-        List<SpdCatAmountVO> spdCatMonthList = statsSpdMonthRepository.findSumListByDateAndUserIdOrderByCatid(month, userId);
+        List<SpdCatAmountVO> spdCatMonthList = statsSpdMonthRepository.findSumListByDateAndUserIdOrderByCatId(month, userId);
 
         List<SpdCatAmountVO> currentSpdCatAmountVOList = calcCurrentCatAmount(spdCatDayList, spdCatMonthList);
 
@@ -73,12 +80,13 @@ public class ConsultingService {
 
         List<SpdCatAmountVO> recommendList = new ArrayList<>();
         long total = 0L;
-
+        log.info(remainRate+" "+ dayRate);
         for(int i=0; i<budget.size(); i++){
             long catId = budget.get(i).getCatId();
             long amount = budget.get(i).getAmount(); // 추천 예산(init = 전체 예산)
+            log.info(catId+" "+ amount);
 
-            if(current.get(i).getAmount().equals(0L)){  // 만약 기간 중에 사용한 금액이 없다면
+            if(current.get(i).getAmount() == 0L){  // 만약 기간 중에 사용한 금액이 없다면
                 amount = (long) (amount * remainRate);
             }else{
                 if(amount > current.get(i).getAmount()){ // 만약 예산 초과 X
@@ -113,11 +121,15 @@ public class ConsultingService {
             ){
         List<TodaySpdRiskRateVO> todaySpdRiskRateVOList = new ArrayList<>();
 
+
+
         for(int i=0; i<recommend.size(); i++){
+            int riskRate = (recommend.get(i).getAmount() > 0 )
+                    ? (int)(100 * current.get(i).getAmount() / recommend.get(i).getAmount()): 0;
 
             todaySpdRiskRateVOList.add(TodaySpdRiskRateVO.builder()
                     .catId(recommend.get(i).getCatId())
-                            .riskRate((int)(100 * current.get(i).getAmount() / recommend.get(i).getAmount()))
+                            .riskRate(riskRate)
                     .build());
         }
 

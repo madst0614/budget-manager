@@ -2,7 +2,7 @@ package wanted.n.budgetmanager.server.dto;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -11,16 +11,14 @@ import java.time.LocalDateTime;
 @Builder
 public class BudgetUpdateDTO {
     private Long userId;
-    private Long id;
-    private LocalDateTime start;
-    private LocalDateTime end;
+    private Long bgId;
+    private List<BudgetDetailVO> budgetDetailList;
 
     public static BudgetUpdateDTO from(Long userId, BudgetUpdateRequestDTO budgetUpdateRequestDTO){
 
         return BudgetUpdateDTO.builder()
                 .userId(userId)
-                .start(budgetUpdateRequestDTO.getStart())
-                .end(budgetUpdateRequestDTO.getEnd())
+                .budgetDetailList(budgetUpdateRequestDTO.getBudgetDetailList())
                 .build();
     }
 }

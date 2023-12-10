@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
@@ -14,9 +13,6 @@ import java.time.LocalDate;
 @Builder
 public class SpendingUpdateRequestDTO {
     private Long catId;
-
-    @NotNull(message = "값을 입력하세요.")
-    private LocalDate date;
 
     @NotNull(message = "값을 입력하세요.")
     private Integer amount;

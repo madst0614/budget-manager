@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import wanted.n.budgetmanager.server.domain.BudgetDetail;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -13,5 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class BudgetDetailResponseDTO {
-    private List<BudgetDetail> budgetDetailList;
+    private LocalDate date;
+    private List<BudgetDetailVO> budgetDetailList;
 }

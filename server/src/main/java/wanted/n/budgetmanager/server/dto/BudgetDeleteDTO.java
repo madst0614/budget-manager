@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class BudgetDeleteDTO {
     private Long userId;
-    private Long id;
+    private Long bdId;
 }
