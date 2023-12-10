@@ -13,6 +13,7 @@ import wanted.n.budgetmanager.server.dto.StatsSpdMonthDTO;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static wanted.n.budgetmanager.server.domain.QCategory.category;
 import static wanted.n.budgetmanager.server.domain.QStatsSpdMonth.statsSpdMonth;
@@ -42,7 +43,7 @@ public class StatsSpdMonthQRepositoryImpl implements StatsSpdMonthQRepository {
     }
 
     @Override
-    public List<SpdCatAmountVO> findSumListByDateAndUserIdOrderByCatid(LocalDate date, Long userId) {
+    public List<SpdCatAmountVO> findSumListByDateAndUserIdOrderByCatId(LocalDate date, Long userId) {
 
         JPQLQuery<SpdCatAmountVO> query = queryFactory.select(Projections.fields(SpdCatAmountVO.class,
                         category.id.as("catId"),  new CaseBuilder()
@@ -57,6 +58,28 @@ public class StatsSpdMonthQRepositoryImpl implements StatsSpdMonthQRepository {
                 .orderBy(category.id.asc());
 
         return query.fetch();
+    }
+
+    @Override
+    public Optional<Long> findAllSumByDateAndUserId(LocalDate date, Long userId) {
+        JPQLQuery<Long> query = queryFactory.select(
+                        statsSpdMonth.sum.sum())
+                .from(statsSpdMonth)
+                .where(statsSpdMonth.date.eq(date), statsSpdMonth.userId.eq(userId))
+                .groupBy(statsSpdMonth.userId);
+
+        return Optional.ofNullable(query.fetchOne());
+
+    }
+
+    @Override
+    public Optional<Long> findAllSumByDate(LocalDate date) {
+        JPQLQuery<Long> query = queryFactory.select(
+                        statsSpdMonth.sum.sum())
+                .from(statsSpdMonth)
+                .where(statsSpdMonth.date.eq(date));
+
+        return Optional.ofNullable(query.fetchOne());
     }
 
     private BooleanExpression catIdEq(List<Long> categoryList){
