@@ -40,4 +40,24 @@ public class OutboxSpdStats {
     @Column
     @NotNull
     private Integer amount;
+
+    public static OutboxSpdStats from(OutboxSpdStatsType type, Spending spending){
+        return OutboxSpdStats.builder()
+                .type(type)
+                .userId(spending.getUserId())
+                .catId(spending.getCatId())
+                .date(spending.getDate())
+                .amount(spending.getAmount())
+                .build();
+    }
+
+    public static OutboxSpdStats from(OutboxSpdStatsType type, Integer amount, Spending spending){
+        return OutboxSpdStats.builder()
+                .type(type)
+                .userId(spending.getUserId())
+                .catId(spending.getCatId())
+                .date(spending.getDate())
+                .amount(amount)
+                .build();
+    }
 }
