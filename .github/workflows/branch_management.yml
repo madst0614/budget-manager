@@ -17,6 +17,7 @@ jobs:
             exit 1;
           elif [[ ${{ github.event_name }} == 'push' && ${{ github.ref }} == 'refs/heads/dev' ]]; then
             echo "Push to 'dev' branch is allowed.";
+            exit 1;
           elif [[ ${{ github.event_name }} == 'pull_request' && (${{ github.event_action }} == 'opened' || ${{ github.event_action }} == 'synchronize') ]]; then
             if [[ ${{ github.base_ref }} == 'dev' ]]; then
               echo "Pull requests to main branch are allowed only from the 'dev' branch.";
