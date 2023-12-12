@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import wanted.n.budgetmanager.server.domain.StatsBudgetDetailAverage;
 
 import java.util.List;
 
@@ -11,6 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BudgetDetailUpdateRequestDTO {
-    private List<BudgetDetailVO> budgetDetailList;
+public class StatsBudgetDetailAverageResponseDTO {
+    List<StatsBudgetDetailAverage> statsBudgetDetailAverageList;
 }

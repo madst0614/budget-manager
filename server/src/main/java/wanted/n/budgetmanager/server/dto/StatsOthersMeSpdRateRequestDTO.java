@@ -5,12 +5,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BudgetDetailUpdateRequestDTO {
-    private List<BudgetDetailVO> budgetDetailList;
+public class StatsOthersMeSpdRateRequestDTO {
+    private Long userId;
+    private LocalDate now;
 }

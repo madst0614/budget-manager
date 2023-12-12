@@ -11,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BudgetDetailUpdateRequestDTO {
-    private List<BudgetDetailVO> budgetDetailList;
+public class StatsLastMonthTodaySpdRateResponseDTO {
+    private Integer totalRate;
+    private List<SpdCatRateVO> spdCatRateVOList;
 }

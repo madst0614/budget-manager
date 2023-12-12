@@ -6,15 +6,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import wanted.n.budgetmanager.server.domain.Budget;
 import wanted.n.budgetmanager.server.domain.BudgetDetail;
+import wanted.n.budgetmanager.server.domain.Category;
 import wanted.n.budgetmanager.server.dto.*;
 import wanted.n.budgetmanager.server.exception.CustomException;
 import wanted.n.budgetmanager.server.exception.ErrorCode;
 import wanted.n.budgetmanager.server.repository.BudgetDetailRepository;
 import wanted.n.budgetmanager.server.repository.BudgetRepository;
-import wanted.n.budgetmanager.server.repository.mapping.UserId;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,12 +46,17 @@ public class BudgetService {
       */
      @Transactional
      public BudgetDetailResponseDTO getBudgetDetail(BudgetDetailDTO budgetDetailDTO){
+          Budget budget = budgetRepository.findById(budgetDetailDTO.getBgId())
+                  .orElseThrow(()->new CustomException(ErrorCode.BUDGET_NOT_FOUND));
 
-          isUserAccessValid(budgetDetailDTO.getUserId(), budgetDetailDTO.getBgId());
+          isUserAccessValid(budgetDetailDTO.getUserId(), budget);
+
+          List<BudgetDetail> budgeDetailList = budgetDetailRepository.findAllByBgId(budgetDetailDTO.getBgId());
 
           return BudgetDetailResponseDTO
                   .builder()
-                  .budgetDetailList(budgetDetailRepository.findAllByBgId(budgetDetailDTO.getBgId()))
+                  .date(budget.getDate())
+                  .budgetDetailList(BudgetDetailVO.from(budgeDetailList))
                   .build();
      }
 
@@ -57,16 +66,57 @@ public class BudgetService {
       */
      @Transactional
      public void registerBudget(BudgetRegisterDTO budgetRegisterDTO){
+          Long userId = budgetRegisterDTO.getUserId();
+          LocalDate now = monthPattern(budgetRegisterDTO.getDate());
 
-          if(budgetRegisterDTO.getStart().isAfter(budgetRegisterDTO.getEnd()))
-               throw new CustomException(ErrorCode.INVALID_DATE);
+          Optional<Budget> opt = budgetRepository.findByUserIdAndDateAndDeleted(userId, now, false);
 
-          budgetRepository.save(Budget.builder()
+          if(opt.isPresent()){
+               throw new CustomException(ErrorCode.BUDGET_EXISTS);
+          }
+
+          Budget budget = budgetRepository.save(Budget.builder()
                           .userId(budgetRegisterDTO.getUserId())
-                          .start(budgetRegisterDTO.getStart())
-                          .end(budgetRegisterDTO.getEnd())
+                          .date(now)
                           .deleted(false)
                           .build());
+
+          List<BudgetDetailVO> budgetDetailVOList =
+                  budgetRegisterDTO.getBudgetDetailVOList();
+
+          budgetDetailVOList.sort((o1, o2) -> (int) (o1.getCatId() - o2.getCatId()));
+
+          List<Category> categoryList = categoryService.getCategoryList();
+          Set<Long> categorySet = categoryList.stream().map(Category::getId).collect(Collectors.toSet());
+          int ci = 0;
+
+          List<Long> emptyList = new ArrayList<>();
+
+          for(BudgetDetailVO budgetDetailVO : budgetDetailVOList){
+               isBudgetDetailValid(budgetDetailVO);
+
+               if(!categorySet.contains(budgetDetailVO.getCatId()))
+                    throw new CustomException(ErrorCode.CATEGORY_NOT_FOUND);
+
+               while (ci < categoryList.size() &&
+                       budgetDetailVO.getCatId() > categoryList.get(ci).getId()){
+                    emptyList.add(categoryList.get(ci).getId());
+
+                    ci++;
+               }
+
+               ci++;
+          }
+
+          for(Long catId : emptyList){
+               budgetDetailVOList.add(BudgetDetailVO
+                       .builder()
+                       .catId(catId)
+                       .amount(0L)
+                       .build());
+          }
+
+          budgetDetailRepository.saveAll(BudgetDetail.from(budget.getId(), budgetDetailVOList));
      }
 
      /** 예산 삭제 메소드
@@ -76,7 +126,8 @@ public class BudgetService {
       */
      @Transactional
      public void deleteBudget(BudgetDeleteDTO budgetDeleteDTO){
-          Budget budget = budgetRepository.findById(budgetDeleteDTO.getId())
+
+          Budget budget = budgetRepository.findById(budgetDeleteDTO.getBdId())
                   .orElseThrow(()->new CustomException(ErrorCode.BUDGET_NOT_FOUND));
 
           isUserAccessValid(budgetDeleteDTO.getUserId(), budget);
@@ -84,78 +135,48 @@ public class BudgetService {
           Budget deletedBudget = Budget.builder()
                   .id(budget.getId())
                   .userId(budget.getUserId())
-                  .start(budget.getStart())
-                  .end(budget.getEnd())
+                  .date(budget.getDate())
                   .deleted(true)
                   .build();
 
           budgetRepository.save(deletedBudget);
      }
 
-     /** 예산 설정 업데이트 메소드
+     /** 예산 카테고리 별 금액 업데이트 메소드
 
-         사용자 예산 설정을 바꿀 수 있습니다.
+         사용자의 예산 카테고리 별 금액을 업데이트 합니다.
           예산이 DB에 있는지, user id가 일치하는지, 유효 기간인지 확인 or not throw exception
       */
      @Transactional
-     public void updateBudget(BudgetUpdateDTO budgetUpdateDTO){
+     public void updateBudgetDetail(BudgetDetailUpdateDTO budgetDetailUpdateDTO){
           // budget 없으면 throw BUDGET NOT FOUND
-          Budget budget = budgetRepository.findById(budgetUpdateDTO.getId())
+          if(budgetDetailUpdateDTO.getBudgetDetailList().isEmpty())
+               return;
+
+          Budget budget = budgetRepository.findById(budgetDetailUpdateDTO.getBgId())
                   .orElseThrow(()->new CustomException(ErrorCode.BUDGET_NOT_FOUND));
 
-          isUserAccessValid(budgetUpdateDTO.getUserId(), budget);
+          isUserAccessValid(budgetDetailUpdateDTO.getUserId(), budget);
 
-          if(budgetUpdateDTO.getStart().isAfter(budgetUpdateDTO.getEnd()))
-               throw new CustomException(ErrorCode.INVALID_DATE);
-
-          budgetRepository.save(Budget.builder()
-                          .id(budget.getId())
-                          .userId(budget.getUserId())
-                          .start(budgetUpdateDTO.getStart())
-                          .end(budgetUpdateDTO.getEnd())
-                          .deleted(budget.getDeleted())
-                          .build());
-     }
-
-     /** 예산 디테일 업데이트 메소드
-
-          사용자의 예산 카테고리 별 금액을 수정합니다.
-          예산존재, 삭제X, 소유자
-          or not throw exception
-      */
-     @Transactional
-     public void updateBudgetDetail(BudgetDetailUpdateDTO budgetDetailUpdateDTO){
-
-          isUserAccessValid(budgetDetailUpdateDTO.getUserId(), budgetDetailUpdateDTO.getBgId());
-
-          // budgetCatPctList 내 bgid 변조 가능성 있으므로 다시 작성
           List<BudgetDetail> budgetDetailList = new ArrayList<>();
 
-          budgetDetailUpdateDTO.getBudgetDetailList()
-                  .forEach(budgetDetail -> {
-                       isCategoryValid(budgetDetail.getCatId());
+          List<Category> categoryList = categoryService.getCategoryList();
+          Set<Long> categorySet = categoryList.stream().map(Category::getId).collect(Collectors.toSet());
 
-                       budgetDetailList
-                          .add(BudgetDetail.builder()
-                                  .bgId(budgetDetailUpdateDTO.getBgId())
-                                  .catId(budgetDetail.getCatId())
-                                  .amount(budgetDetail.getAmount())
-                                  .build());});
+          budgetDetailUpdateDTO.getBudgetDetailList().forEach(budgetDetailVO -> {
+               isBudgetDetailValid(budgetDetailVO);
+
+               if(!categorySet.contains(budgetDetailVO.getCatId()))
+                    throw new CustomException(ErrorCode.CATEGORY_NOT_FOUND);
+
+               budgetDetailList.add(BudgetDetail.builder()
+                       .bgId(budgetDetailUpdateDTO.getBgId())
+                       .catId(budgetDetailVO.getCatId())
+                       .amount(budgetDetailVO.getAmount())
+                       .build());
+          });
 
           budgetDetailRepository.saveAll(budgetDetailList);
-     }
-
-     public void isUserAccessValid(Long accessUserId, Long bgId){
-          UserId userId = budgetRepository.findUserIdById(bgId)
-                  .orElseThrow(()-> new CustomException(ErrorCode.BUDGET_NOT_FOUND));
-
-          if(userId.getDeleted())
-               throw new CustomException(ErrorCode.BUDGET_DELETED);
-
-          if(!userId.getUserId().equals(accessUserId)){
-               throw new CustomException(ErrorCode.UNAUTHORIZED_ACCESS);
-          }
-
      }
 
      public void isUserAccessValid(Long accessUserId, Budget budget){
@@ -166,7 +187,16 @@ public class BudgetService {
                throw new CustomException(ErrorCode.UNAUTHORIZED_ACCESS);
      }
 
-     public void isCategoryValid(Long id){
-          categoryService.getCategory(CategoryRequestDTO.builder().id(id).build());
+     public void isBudgetDetailValid(BudgetDetailVO budgetDetailVO){
+          Long amount = budgetDetailVO.getAmount();
+          Long catId = budgetDetailVO.getCatId();
+
+          if(catId == null || amount == null || amount < 0)
+               throw new CustomException(ErrorCode.INVALID_BUDGET_DETAIL);
+
+     }
+
+     public LocalDate monthPattern(LocalDate date){
+          return LocalDate.of(date.getYear(), date.getMonth(), 1);
      }
 }

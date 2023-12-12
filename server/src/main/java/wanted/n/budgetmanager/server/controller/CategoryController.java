@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import wanted.n.budgetmanager.server.dto.CategoryListResponseDTO;
+import wanted.n.budgetmanager.server.domain.Category;
 import wanted.n.budgetmanager.server.service.CategoryService;
+
+import java.util.List;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.OK;
@@ -24,7 +26,8 @@ public class CategoryController {
 
     @GetMapping("")
     @ApiOperation(value = "카테고리 가져오기", notes = "모든 카테고리 리스트를 가져옵니다")
-    public ResponseEntity<CategoryListResponseDTO> getCategoryList(@RequestHeader(AUTHORIZATION) String token){
+    public ResponseEntity<List<Category>> getCategoryList(@RequestHeader(AUTHORIZATION) String token){
+
         return ResponseEntity.status(OK).body(categoryService.getCategoryList());
     }
 }

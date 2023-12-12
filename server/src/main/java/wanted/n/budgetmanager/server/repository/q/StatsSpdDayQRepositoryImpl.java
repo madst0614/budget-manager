@@ -13,6 +13,7 @@ import wanted.n.budgetmanager.server.dto.StatsSpdDayDTO;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static wanted.n.budgetmanager.server.domain.QCategory.category;
 import static wanted.n.budgetmanager.server.domain.QStatsSpdDay.statsSpdDay;
@@ -22,7 +23,7 @@ import static wanted.n.budgetmanager.server.domain.QStatsSpdDay.statsSpdDay;
 public class StatsSpdDayQRepositoryImpl implements StatsSpdDayQRepository{
     private final JPAQueryFactory queryFactory;
     @Override
-    public StatsSpdDay getSumByCatIdList(StatsSpdDayDTO statsSpdDayDTO) {
+    public StatsSpdDay findSumByCatIdList(StatsSpdDayDTO statsSpdDayDTO) {
 
         // 유저 id 조건
         JPQLQuery<StatsSpdDay> query = queryFactory.select(Projections.fields(StatsSpdDay.class
@@ -57,6 +58,36 @@ public class StatsSpdDayQRepositoryImpl implements StatsSpdDayQRepository{
                 .orderBy(category.id.asc());
 
         return query.fetch();
+    }
+
+    @Override
+    public List<SpdCatAmountVO> findSumListByPeriodAndUserIdOrderByCatId(LocalDate start, LocalDate end, Long userId) {
+        JPQLQuery<SpdCatAmountVO> query = queryFactory.select(Projections.fields(SpdCatAmountVO.class,
+                        category.id.as("catId"), new CaseBuilder()
+                                .when(statsSpdDay.sum.isNull())
+                                .then(0L)
+                                .otherwise(statsSpdDay.sum).as("amount")
+                ))
+                .from(category)
+                .leftJoin(statsSpdDay).on(statsSpdDay.catId.eq(category.id)
+                        .and(statsSpdDay.date.goe(start).or(statsSpdDay.date.isNull())
+                                .and(statsSpdDay.date.loe(end).or(statsSpdDay.date.isNull()))
+                                .and(statsSpdDay.userId.eq(userId).or(statsSpdDay.userId.isNull()))))
+                .orderBy(category.id.asc());
+
+        return query.fetch();
+    }
+
+
+    @Override
+    public Optional<Long> findAllSumByDateAndUserId(LocalDate date, Long userId) {
+        JPQLQuery<Long> query = queryFactory.select(
+                        statsSpdDay.sum.sum())
+                .from(statsSpdDay)
+                .where(statsSpdDay.date.eq(date), statsSpdDay.userId.eq(userId))
+                .groupBy(statsSpdDay.userId);
+
+        return Optional.ofNullable(query.fetchOne());
     }
 
     private BooleanExpression catIdEq(List<Long> categoryList){

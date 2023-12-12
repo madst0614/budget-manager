@@ -4,19 +4,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import wanted.n.budgetmanager.server.service.OutboxService;
+import wanted.n.budgetmanager.server.service.StatsService;
 
 import javax.transaction.Transactional;
 
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class OutboxSpdStatsScheduler {
-    private final OutboxService outboxService;
+public class StatsScheduler {
+    private final StatsService statsService;
 
-    @Scheduled(cron = "0/10 * * * * ?")
+//    @Scheduled(cron = "0 0 */1 * * ?")
+@Scheduled(cron = "0/10 * * * * ?")
     @Transactional
-    public void consumeOutboxSpdStatsLimit100() {
-        outboxService.consumeOutboxSpdStatsLimit100();
+    public void updateStatsBudgetDetailAverage() {
+        statsService.updateStatsBudgetDetailAverage();
     }
 }
