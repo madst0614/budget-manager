@@ -67,7 +67,7 @@ public class StatsController {
     }
 
     @GetMapping("budgetdetail/average")
-    @ApiOperation(value = "예산 평균 가져오기", notes = "모든 사용자의 예산 평균 퍼센테이지를 가져옵니다.")
+    @ApiOperation(value = "모든 사용자 예산 평균 가져오기", notes = "모든 사용자의 예산 평균 퍼센테이지를 가져옵니다.")
     public ResponseEntity<StatsBudgetDetailAverageResponseDTO> getStatsBudgetDetailAverage(
             @RequestHeader(AUTHORIZATION) String token) {
 

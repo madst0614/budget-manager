@@ -18,7 +18,7 @@
 ## 사용기술
 
 #### 개발환경
-<img src="https://img.shields.io/badge/java-007396?&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/spring-6DB33F?&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/Spring boot-6DB33F?&logo=Spring boot&logoColor=white"> <img src="https://img.shields.io/badge/gradle-02303A?&logo=gradle&logoColor=white">
+<img src="https://img.shields.io/badge/java-007396?&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/Spring boot-6DB33F?&logo=Spring boot&logoColor=white"> <img src="https://img.shields.io/badge/gradle-02303A?&logo=gradle&logoColor=white">
 <br>
 <img src="https://img.shields.io/badge/MariaDB-003545?&logo=mariaDB&logoColor=white"> <img src="https://img.shields.io/badge/redis-DC382D?&logo=redis&logoColor=white"> <img src="https://img.shields.io/badge/Spring JPA-6DB33F?&logo=Spring JPA&logoColor=white"> <img src="https://img.shields.io/badge/querydsl-2599ED?&logo=querydsl&logoColor=white">
 <br>
@@ -35,25 +35,29 @@
 [![Swagger](https://img.shields.io/badge/swagger_문서로_확인하기_(클릭!)-85EA2D?&logo=swagger&logoColor=white)](http://52.79.93.98:8080/swagger-ui/index.html#/)
 
 
-| API Type           | Http Method | URL                               | Description     |
-|--------------------|-------------|-----------------------------------|-----------------|
-| **Auth API**       | POST        | `/api/v1/auth/token/access`       | 엑세스토큰 재발급       | 
-| **User API**       | POST        | `/api/v1/users/sign-up`           | 회원가입            |
-| **User API**       | POST        | `/api/v1/users/sign-in`           | 로그인             |
-| **User API**       | POST        | `/api/v1/users/sign-out`          | 로그아웃            |
-| **Category API**   | GET         | `/api/v1/categorys`               | 카테고리 리스트        |
-| **Budget API**     | GET         | `/api/v1/budgets`                 | 사용자 예산 리스트      |
-| **Budget API**     | GET         | `/api/v1/budgets/{bgId}`          | 사용자 예산 상세정보     |
-| **Budget API**     | POST        | `/api/v1/budgets`                 | 사용자 예산 등록       |
-| **Budget API**     | DELETE      | `/api/v1/budgets/{bgId}`          | 사용자 예산 삭제       |
-| **Budget API**     | PATCH       | `/api/v1/budgets/{bgId}`          | 사용자 예산 업데이트     |
-| **Budget API**     | PUT         | `/api/v1/budgets/detail/{bgId}`   | 사용자 예산 디테일 업데이트 |
-| **Spending API**   | GET         | `/api/v1/spendings `              | 사용자 지출 목록 가져오기  |
-| **Spending API**   | POST        | `/api/v1/spendings `              | 사용자 지출 기록 생성    |
-| **Spending API**   | GET         | `/api/v1/spendings/{id} `         | 사용자 지출 기록 가져오기  |
-| **Spending API**   | DELETE      | `/api/v1/spendings/{id} `         | 사용자 지출 기록 삭제    |
-| **Statistics API** | GET         | `/api/v1/stats/{yyyy}/{MM}/{dd} ` | 사용자 하루 통계 가져오기  |
-| **Statistics API** | PUT         | `/api/v1/stats/{yyyy}/{MM}/{dd} ` | 사용자 하루 통계 업데이트  |
+| API Type           | Http Method | URL                                     | Description          |
+|--------------------|-------------|-----------------------------------------|----------------------|
+| **Auth API**       | POST        | `/api/v1/auth/token/access`             | 엑세스토큰 재발급            | 
+| **User API**       | POST        | `/api/v1/users/sign-up`                 | 회원가입                 |
+| **User API**       | POST        | `/api/v1/users/sign-in`                 | 로그인                  |
+| **User API**       | POST        | `/api/v1/users/sign-out`                | 로그아웃                 |
+| **Category API**   | GET         | `/api/v1/categorys`                     | 카테고리 리스트 가져오기        |
+| **Budget API**     | GET         | `/api/v1/budgets`                       | 사용자 예산 리스트           |
+| **Budget API**     | GET         | `/api/v1/budgets/{bgId}`                | 사용자 예산 상세정보          |
+| **Budget API**     | POST        | `/api/v1/budgets`                       | 사용자 예산 등록            |
+| **Budget API**     | DELETE      | `/api/v1/budgets/{bgId}`                | 사용자 예산 삭제            |
+| **Budget API**     | PUT         | `/api/v1/budgets/detail/{bgId}`         | 사용자 예산 디테일 업데이트      |
+| **Spending API**   | GET         | `/api/v1/spendings `                    | 사용자 지출 목록 가져오기       |
+| **Spending API**   | POST        | `/api/v1/spendings `                    | 사용자 지출 기록 생성         |
+| **Spending API**   | GET         | `/api/v1/spendings/{id} `               | 사용자 지출 기록 가져오기       |
+| **Spending API**   | DELETE      | `/api/v1/spendings/{id} `               | 사용자 지출 기록 삭제         |
+| **Spending API**   | PATCH       | `/api/v1/spendings/{id} `               | 사용자 지출 기록 업데이트       |
+| **Consulting API** | GET         | `/api/v1/consultings/recommend/today" ` | 오늘 지출 추천 가져오기        |
+| **Consulting API** | GET         | `/api/v1/consultings/notice/today" `    | 오늘 지출 정보 가져오기        |
+| **Statistics API** | GET         | `/api/v1/stats/rates/lastMonth `        | 사용자 지난 달 대비 소비율 가져오기 |
+| **Statistics API** | GET         | `/api/v1/stats/rates/lastWeek `         | 사용자 지난 주 대비 소비율 가져오기 |
+| **Statistics API** | GET         | `/api/v1/stats/rates/otherUsers-Me `    | 사용자 다른 유저 대비 소비율 가져오기 |
+| **Statistics API** | GET         | `/api/v1/stats/budgetdetail/average `   | 모든 사용자 예산 평균 가져오기    |
 
 ## 구현기능
 
