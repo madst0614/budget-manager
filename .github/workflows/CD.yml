@@ -82,5 +82,5 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           envs: GITHUB_SHA
           script: |
-            docker-compose pull
-            docker-compose up -d
+            sudo docker-compose pull
+            sudo docker-compose up -d
