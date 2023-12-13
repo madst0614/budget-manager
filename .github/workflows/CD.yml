@@ -1,0 +1,75 @@
+name: CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: PR 및 Branch 확인
+        run: |
+          if [[ "${{ github.event_name }}" == 'push' && "${{ github.event.ref }}" == 'refs/heads/main' ]]; then
+            echo "Push to main branch is allowed.";
+          else
+            echo "Invalid event or branch. Not allowed.";
+            exit 1;
+          fi
+
+      # 체크 아웃
+      - name: repository 체크 아웃
+        uses: actions/checkout@v3
+
+      # jdk 세팅
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+
+        # gradle 캐싱
+      - name: Gradle Caching
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      ## CD
+      #gradlew 권한 추가
+      - name: Grant Execute Permission For Gradlew
+        run: chmod +x gradlew
+
+      #test를 제외한 프로젝트 빌드
+      - name: Build With Gradle
+        run: ./gradlew build -x test
+
+      #도커 빌드 & 이미지 push
+      - name: Docker build & Push
+        run: |
+          docker login -u ${{ secrets.DOCKER_ID }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -f ./server/Dockerfile . -t ${{ secrets.DOCKER_REPO }}/budget-manager
+          docker push ${{ secrets.DOCKER_REPO }}/budget-manager
+
+      #docker-compose 파일을 ec2 서버에 배포
+      - name: Deploy to Prod
+        uses: appleboy/ssh-action@master
+        id: deploy-prod
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          envs: GITHUB_SHA
+          script: |
+            cp docker-compose.yml /home/ubuntu/docker-compose.yml
+            sudo docker rm -f $(docker ps -qa)
+            sudo docker pull ${{ secrets.DOCKER_REPO }}/budget-manager
+            docker-compose up -d
+            docker image prune -f  

@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ "main", "dev" ]
+  push:
+    branches: [ "dev" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      # Pull Request 및 Push 검증
+      - name: PR 및 Branch 확인
+        run: |
+          if [[ "${{ github.event_name }}" == 'pull_request' ]]; then
+            if [[ "${{ github.event.action }}" == 'opened' || "${{ github.event.action }}" == 'synchronize' ]]; then
+              if [[ "${{ github.event.pull_request.base.ref }}" == 'dev' || "${{ github.event.pull_request.base.ref }}" == 'main' ]]; then
+                echo "Branch is allowed.";
+              else
+                echo "Branch is not allowed.";
+                exit 1;
+              fi
+            else
+              echo "Invalid action for pull request.";
+              exit 1;
+            fi
+          elif [[ "${{ github.event_name }}" == 'push' ]]; then
+            if [[ "${{ github.event.ref }}" == 'refs/heads/dev' || "${{ github.event.ref }}" == 'refs/heads/main' ]]; then
+              echo "Branch is allowed.";
+            else
+              echo "Branch is not allowed.";
+              exit 1;
+            fi
+          else
+            echo "Invalid event.";
+            exit 1;
+          fi
+
+      # 체크 아웃
+      - name: repository 체크 아웃
+        uses: actions/checkout@v3
+
+      # jdk 세팅
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+
+        # gradle 캐싱
+      - name: Gradle Caching
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      ## CI
+      #gradlew 권한 추가
+      - name: Grant Execute Permission For Gradlew
+        run: chmod +x gradlew
+
+      #test를 제외한 프로젝트 빌드
+      - name: Build With Gradle
+        run: ./gradlew build -x test
+
+      ### 테스팅 과정 생략 ###
