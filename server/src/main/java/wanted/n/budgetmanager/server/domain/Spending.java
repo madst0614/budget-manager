@@ -56,12 +56,12 @@ public class Spending {
                 .build();
     }
 
-    public static Spending from(SpendingUpdateDTO spendingUpdateDTO){
+    public static Spending from(LocalDate date , SpendingUpdateDTO spendingUpdateDTO){
         return Spending.builder()
                 .id(spendingUpdateDTO.getId())
                 .userId(spendingUpdateDTO.getUserId())
                 .catId(spendingUpdateDTO.getCatId())
-                .date(spendingUpdateDTO.getDate())
+                .date(date)
                 .amount(spendingUpdateDTO.getAmount())
                 .memo(spendingUpdateDTO.getMemo())
                 .excluded(spendingUpdateDTO.getExcluded())

@@ -5,8 +5,11 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import wanted.n.budgetmanager.server.dto.CategoryListResponseDTO;
+import wanted.n.budgetmanager.server.domain.Category;
 import wanted.n.budgetmanager.server.repository.CategoryRepository;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,11 +22,17 @@ public class CategoryService {
      */
     @Cacheable(value="categoryList", key="'category'")
     @Transactional
-    public CategoryListResponseDTO getCategoryList(){
+    public List<Category> getCategoryList(){
 
-        return CategoryListResponseDTO.from(categoryRepository.findAll());
+        return categoryRepository.findAllByOrderByIdAsc();
     }
 
+    @Cacheable(value="category", key="'categoryId'")
+    @Transactional
+    public Optional<Category> getCategory(Long id){
+
+        return categoryRepository.findById(id);
+    }
 
     @CacheEvict(value="categoryList", key="'category'")
     public void createCategory(){

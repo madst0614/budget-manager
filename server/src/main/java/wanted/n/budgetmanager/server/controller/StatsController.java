@@ -4,17 +4,15 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import wanted.n.budgetmanager.server.dto.StatsSpdDayGetDTO;
-import wanted.n.budgetmanager.server.dto.StatsSpdDayUpdateDTO;
-import wanted.n.budgetmanager.server.dto.StatsSpdDayUpdateRequestDTO;
-import wanted.n.budgetmanager.server.dto.StatsSpyDayResponseDTO;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import wanted.n.budgetmanager.server.dto.*;
 import wanted.n.budgetmanager.server.service.AuthService;
 import wanted.n.budgetmanager.server.service.StatsService;
 
-import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.List;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.OK;
@@ -26,49 +24,57 @@ import static org.springframework.http.HttpStatus.OK;
 public class StatsController {
     private final AuthService authService;
     private final StatsService statsService;
-    @GetMapping("{yyyy}/{MM}/{dd}")
-    @ApiOperation(value = "사용자 하루 통계 가져오기", notes = "사용자 하루 통계를 가져옵니다.")
-    public ResponseEntity<StatsSpyDayResponseDTO> getStatsSpdDay(
-            @RequestHeader(AUTHORIZATION) String token,
-            @PathVariable("yyyy") Integer year,
-            @PathVariable("MM") Integer month,
-            @PathVariable("dd") Integer day,
-            @RequestParam(value = "categoryList") List<Long> categoryList) {
+    @GetMapping("/rates/lastMonth")
+    @ApiOperation(value = "사용자 지난 달 대비 소비율 가져오기", notes = "사용자의 지난 달 대비 소비율 통계를 가져옵니다.")
+    public ResponseEntity<StatsLastMonthTodaySpdRateResponseDTO> getLastMonthSpdRate(
+            @RequestHeader(AUTHORIZATION) String token) {
 
         // 토큰으로부터 id 추출
         Long userId = authService.getUserIdFromToken(token);
+        LocalDate now = LocalDate.now();
 
         return ResponseEntity.status(OK).body
-                (statsService.getStatsSpdDay(StatsSpdDayGetDTO
-                        .builder()
-                                .userId(userId)
-                                .date(LocalDate.of(year, month, day))
-                                .catIdList(categoryList)
-                        .build()));
+                (statsService.getStatsLastMonthTodaySpdRate(StatsLastMonthTodaySpdRateRequestDTO
+                        .builder().userId(userId).now(now).build()));
     }
 
-    @PutMapping("{yyyy}/{MM}/{dd}")
-    @ApiOperation(value = "사용자 하루 통계 업데이트", notes = "사용자의 하루 통계를 업데이트합니다.")
-    public ResponseEntity<Void> updateBudget(
-            @RequestHeader(AUTHORIZATION) String token,
-            @PathVariable("yyyy") Integer year,
-            @PathVariable("MM") Integer month,
-            @PathVariable("dd") Integer day,
-            @Valid @RequestBody StatsSpdDayUpdateRequestDTO statsSpdDayUpdateRequestDTO ) {
+    @GetMapping("/rates/lastWeek")
+    @ApiOperation(value = "사용자 지난 주 대비 소비율 가져오기", notes = "사용자의 지난 주 대비 소비율 통계를 가져옵니다.")
+    public ResponseEntity<StatsLastWeekTodaySpdRateResponseDTO> getLastWeekSpdRate(
+            @RequestHeader(AUTHORIZATION) String token) {
 
-        // 토큰으로부터 userid 추출
+        // 토큰으로부터 id 추출
         Long userId = authService.getUserIdFromToken(token);
+        LocalDate now = LocalDate.now();
 
-        statsService.updateStatsSpdDay(StatsSpdDayUpdateDTO
-                .builder()
-                        .userId(userId)
-                        .catId(statsSpdDayUpdateRequestDTO.getCatId())
-                        .date(LocalDate.of(year, month, day))
-                        .amount(statsSpdDayUpdateRequestDTO.getAmount())
-                .build());
-
-        return ResponseEntity.status(OK).build();
+        return ResponseEntity.status(OK).body
+                (statsService.getStatsLastWeekTodaySpdRate(StatsLastWeekTodaySpdRateRequestDTO
+                        .builder().userId(userId).now(now).build()));
     }
+
+    @GetMapping("/rates/otherUsers-Me")
+    @ApiOperation(value = "사용자 다른 유저 대비 소비율 가져오기", notes = "사용자의 다른 유저 대비 예산 현재 소비율 통계를 가져옵니다.")
+    public ResponseEntity<StatsOthersMeSpdRateResponseDTO> getOtherUsersMeBudgetSpdRate(
+            @RequestHeader(AUTHORIZATION) String token) {
+
+        // 토큰으로부터 id 추출
+        Long userId = authService.getUserIdFromToken(token);
+        LocalDate now = LocalDate.now();
+
+        return ResponseEntity.status(OK).body
+                (statsService.getStatsOthersMeSpdRate(StatsOthersMeSpdRateRequestDTO
+                        .builder().userId(userId).now(now).build()));
+    }
+
+    @GetMapping("budgetdetail/average")
+    @ApiOperation(value = "예산 평균 가져오기", notes = "모든 사용자의 예산 평균 퍼센테이지를 가져옵니다.")
+    public ResponseEntity<StatsBudgetDetailAverageResponseDTO> getStatsBudgetDetailAverage(
+            @RequestHeader(AUTHORIZATION) String token) {
+
+        return ResponseEntity.status(OK).body
+                (statsService.getStatsBudgetDetailAverage());
+    }
+
 }
 
 

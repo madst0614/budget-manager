@@ -113,7 +113,6 @@ public class SpendingController {
                         .userId(userId)
                         .id(id)
                         .catId(spendingUpdateRequestDTO.getCatId())
-                        .date(spendingUpdateRequestDTO.getDate())
                         .amount(spendingUpdateRequestDTO.getAmount())
                         .memo(spendingUpdateRequestDTO.getMemo())
                         .excluded(spendingUpdateRequestDTO.getExcluded())

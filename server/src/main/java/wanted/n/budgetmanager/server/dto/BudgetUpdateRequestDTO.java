@@ -6,12 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class BudgetUpdateRequestDTO {
-    private LocalDateTime start;
-    private LocalDateTime end;
+    private LocalDateTime date;
+
+    List<BudgetDetailVO> budgetDetailList;
 }

@@ -2,7 +2,7 @@ package wanted.n.budgetmanager.server.dto;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -10,6 +10,5 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class BudgetRegisterRequestDTO {
-    private LocalDateTime start;
-    private LocalDateTime end;
+    private List<BudgetDetailVO> budgetDetailVOList;
 }

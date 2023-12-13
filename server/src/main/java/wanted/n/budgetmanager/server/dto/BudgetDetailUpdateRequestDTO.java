@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import wanted.n.budgetmanager.server.domain.BudgetDetail;
 
 import java.util.List;
 
@@ -13,5 +12,5 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class BudgetDetailUpdateRequestDTO {
-    private List<BudgetDetail> budgetDetailList;
+    private List<BudgetDetailVO> budgetDetailList;
 }

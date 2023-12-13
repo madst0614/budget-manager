@@ -10,6 +10,7 @@ import wanted.n.budgetmanager.server.service.AuthService;
 import wanted.n.budgetmanager.server.service.BudgetService;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -63,43 +64,29 @@ public class BudgetController {
         // 토큰으로부터 userid 추출
         Long userId = authService.getUserIdFromToken(token);
 
-        budgetService.registerBudget(BudgetRegisterDTO.from(userId, budgetRegisterRequestDTO));
+        budgetService.registerBudget(
+                BudgetRegisterDTO.builder()
+                        .userId(userId)
+                .date(LocalDate.now())
+                .budgetDetailVOList(budgetRegisterRequestDTO.getBudgetDetailVOList())
+                .build());
 
         return ResponseEntity.status(CREATED).build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{bdId}")
     @ApiOperation(value="예산 삭제", notes="사용자가 만든 예산을 삭제합니다.")
     public ResponseEntity<Void> deleteBudget(@RequestHeader(AUTHORIZATION) String token,
-                    @PathVariable("id") Long id){
+                    @PathVariable("bdId") Long bdId){
         // 토큰으로부터 userid 추출
         Long userId = authService.getUserIdFromToken(token);
 
-        budgetService.deleteBudget(BudgetDeleteDTO.builder().userId(userId).id(id).build());
+        budgetService.deleteBudget(BudgetDeleteDTO.builder().userId(userId).bdId(bdId).build());
 
         return ResponseEntity.status(OK).build();
     }
 
-    @PatchMapping("/{id}")
-    @ApiOperation(value = "예산 업데이트", notes = "사용자가 만든 예산을 업데이트 합니다.")
-    public ResponseEntity<Void> updateBudget(
-            @RequestHeader(AUTHORIZATION) String token,
-            @PathVariable("id") Long id,
-            @Valid @RequestBody BudgetUpdateRequestDTO budgetUpdateRequestDTO ) {
-
-        // 토큰으로부터 userid 추출
-        Long userId = authService.getUserIdFromToken(token);
-
-        BudgetUpdateDTO budgetUpdateDTO = BudgetUpdateDTO.from(userId, budgetUpdateRequestDTO);
-
-        budgetUpdateDTO.setId(id);
-
-        budgetService.updateBudget(budgetUpdateDTO);
-
-        return ResponseEntity.status(OK).build();
-    }
-
-    @PutMapping("detail/{bgId}")
+    @PatchMapping("detail/{bgId}")
     @ApiOperation(value = "예산 디테일 업데이트", notes = "사용자가 설정한 예산 디테일을 업데이트 합니다.")
     public ResponseEntity<Void> updateBudgetDetail(
             @RequestHeader(AUTHORIZATION) String token,

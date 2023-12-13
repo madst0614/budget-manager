@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
@@ -25,11 +25,7 @@ public class Budget {
 
     @Column
     @NotNull(message = "값을 입력하세요.")
-    private LocalDateTime start;
-
-    @Column
-    @NotNull(message = "값을 입력하세요.")
-    private LocalDateTime end;
+    private LocalDate date;
 
     @Column
     @NotNull

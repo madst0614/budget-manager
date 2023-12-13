@@ -31,8 +31,8 @@ public class JwtProvider{
     private String issuer;
     private SecretKey secretKey;
     // Access Token, Refresh Token 만료시간
-    private final int ATEXP = 5 * 60 * 1000;
-    private final int RTEXP = 60 * 60 * 1000;
+    private final int ATEXP = 600 * 60 * 1000;
+    private final int RTEXP = 1200 * 60 * 1000;
 
 
     /* SecretKey 초기화 메서드 (빈 생성 시 1회 실행) */
