@@ -71,7 +71,6 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           envs: GITHUB_SHA
           script: |
-            cp docker-compose.yml /home/ubuntu/docker-compose.yml
             sudo docker rm -f $(docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_REPO }}/budget-manager
             docker-compose up -d

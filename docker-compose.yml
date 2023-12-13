@@ -11,9 +11,9 @@ services:
       - network
 
   server:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
+    image: madst0614/budget-manager:latest
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod"
     ports:
       - 8080:8080
     depends_on:
