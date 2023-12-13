@@ -70,6 +70,8 @@ jobs:
 
       #test를 제외한 프로젝트 빌드
       - name: Build With Gradle
-        run: ./server/gradlew build -x test
+        run: |
+          cd ./server
+          gradlew build -x test
 
       ### 테스팅 과정 생략 ###
