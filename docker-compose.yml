@@ -1,37 +1,21 @@
 version: '3.3'
 
-# env file로 민감한 정보(ex. ${DB_BINDING_PORT}) 관리
-# env file은 docker-compose.yml와 같은 디렉토리에 .env로 생성
 services:
-  db:
-    env_file: ./db/db.env
-    build:
-      context: ./db
-      dockerfile: Dockerfile
-    ports: # 바인딩할 포트:내부 포트
-      - ${DB_BINDING_PORT}:${DB_PORT}
-    volumes: # 마운트할 볼륨 설정
-      - ${DB_DATA_PATH}:/var/lib/mariadb
-    networks:
-      - network
-
   redis:
     image : redis
     ports: # 바인딩할 포트:내부 포트
-      - ${REDIS_BINDING_PORT}:${REDIS_PORT}
+      - 6379:6379
     volumes: # 마운트할 볼륨 설정
-      - ${REDIS_DATA_PATH}:/data
-      - ${REDIS_DEFAULT_CONFIG_FILE}:/usr/local/etc/redis/redis.conf
+      - .\redis\store:/data
     networks:
       - network
 
   server:
-    env_file: ./server/server.env
     build:
       context: ./server
       dockerfile: Dockerfile
     ports:
-      - ${SERVER_BINDING_PORT}:${SERVER_PORT}
+      - 8080:8080
     depends_on:
       db:
         condition: service_started
