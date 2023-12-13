@@ -13,13 +13,12 @@ services:
   server:
     image: madst0614/budget-manager:latest
     environment:
-      - "SPRING_PROFILES_ACTIVE=prod"
+      SPRING_PROFILES_ACTIVE: ${APPLICATION_PROFILE}
+      DB_URL: ${DB_URL}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
     ports:
       - 8080:8080
-    depends_on:
-      db:
-        condition: service_started
-    restart: on-failure
     networks:
       - network
 

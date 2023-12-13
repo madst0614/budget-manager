@@ -61,6 +61,17 @@ jobs:
           docker build -f ./server/Dockerfile . -t ${{ secrets.DOCKER_REPO }}/budget-manager
           docker push ${{ secrets.DOCKER_REPO }}/budget-manager
 
+      #도커 컴포즈
+      - name: copy file via ssh password
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          envs: GITHUB_SHA
+          source: "docker-compose.yaml"
+          target: "/home/ubuntu/"
+
       #docker-compose 파일을 ec2 서버에 배포
       - name: Deploy to Prod
         uses: appleboy/ssh-action@master
@@ -70,8 +81,4 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           envs: GITHUB_SHA
-          script: |
-            sudo docker rm -f $(docker ps -qa)
-            sudo docker pull ${{ secrets.DOCKER_REPO }}/budget-manager
-            docker-compose up -d
-            docker image prune -f  
+          script: "docker-compose pull && docker-compose up -d"
