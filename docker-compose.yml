@@ -19,7 +19,7 @@ services:
     depends_on:
       db:
         condition: service_started
-    restart: always
+    restart: on-failure
     networks:
       - network
 
