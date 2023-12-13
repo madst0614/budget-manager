@@ -72,6 +72,6 @@ jobs:
       - name: Build With Gradle
         run: |
           cd ./server
-          gradlew build -x test
+          ./gradlew build -x test
 
       ### 테스팅 과정 생략 ###
