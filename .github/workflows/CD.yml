@@ -62,7 +62,7 @@ jobs:
           docker push ${{ secrets.DOCKER_REPO }}/budget-manager
 
       #도커 컴포즈
-      - name: copy file via ssh password
+      - name: Copy docker-compose to EC2
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
